@@ -1,0 +1,37 @@
+[![English](https://img.shields.io/badge/English-blue.svg)](README.en.md)
+[![Português](https://img.shields.io/badge/Português-green.svg)](README.md)
+
+# Compass.UOL - Projects
+
+Repository dedicated to internship projects at Compass.UOL.
+
+## Structure
+
+```
+.
+├── sprint-2/
+│   ├── docs/
+│   │   ├── README.md 
+│   │   └── README.en.md
+│   └── imgs/
+│   └── scripts/
+│      ├── nginx_status_monitor.sh
+└── README.md
+```
+
+## Projects
+
+### Sprint 2 - Automated nginx Monitoring
+Automated monitoring system for nginx server using AWS infrastructure.
+
+- [Documentação em português](./sprint-2/nginx-monitoring/docs/README.md)
+- [Documentation in English](./sprint-2/nginx-monitoring/docs/README.en.md)
+
+## Technologies Used
+
+- AWS 
+- Linux
+- Shell Script
+- nginx
+- Git
+
