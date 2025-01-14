@@ -16,6 +16,7 @@ Repositório dedicado aos projetos de estágio na Compass.UOL.
 │   └── imgs/
 │   └── scripts/
 │      ├── nginx_status_monitor.sh
+├── README.en.md
 └── README.md
 ```
 
