@@ -1,3 +1,6 @@
+[![English](https://img.shields.io/badge/English-blue.svg)](README.en.md)
+[![Português](https://img.shields.io/badge/Português-green.svg)](README.md)
+
 # Monitoramento Automatizado do nginx no Ubuntu 
 
 ## Sobre o projeto
@@ -71,7 +74,7 @@ Antes de criarmos nossa instância EC2, precisamos configurar o ambiente de rede
 
 #### Preview do VPC Workflow
 
-![VPC Workflow](compass-devsecops-scholarship/sprint-2/nginx-monitoring/imgs/nginx-vpc-workflow.png)
+![VPC Workflow](../imgs/nginx-vpc-workflow.png)
 
 ## 3. Configuração e Criação da Instância EC2
 
@@ -198,7 +201,7 @@ sudo systemctl status nginx
 
 4. Caso o nginx esteja rodando corretamente, o comando retornará uma saída como essa:
 
-![Status do nginx Ativo](compass-devsecops-scholarship/sprint-2/nginx-monitoring/imgs/nginx_active_status.png)
+![Status do nginx Ativo](../imgs/nginx_active_status.png)
 
 5. Para garantir que o nginx inicie automaticamente após a reinicialização da instância, use o comando:
 
@@ -208,7 +211,7 @@ sudo systemctl enable nginx
 
 6. Para verificar se o servidor está funcionando, abra o navegador e digite o IP elástico da instância na barra de endereços. Se tudo estiver certo, o servidor deve mostrar a página padrão do nginx:
 
-![Página Padrão do nginx](compass-devsecops-scholarship/sprint-2/nginx-monitoring/imgs/nginx_default_homepage.png)
+![Página Padrão do nginx](../imgs/nginx_default_homepage.png)
 
 ## 6. Criação do Script de monitoramento do status do nginx
 
@@ -284,7 +287,7 @@ nginx_status_monitor.sh
 
 5. Em seguida, verifique os arquivos de log correspondentes. Exemplo do arquivo de log `nginx_online.log` com os logs do serviço ativos:
 
-![Entrada de Log Online Manual](compass-devsecops-scholarship/sprint-2/nginx-monitoring/imgs/manual_online_log_entry.png)
+![Entrada de Log Online Manual](../imgs/manual_online_log_entry.png)
 
 ## 7. Automatização do Script
 
@@ -328,15 +331,15 @@ Após salvar as configurações no crontab, a execução do script será iniciad
 
     1.1 O comando deve retornar a tarefa configurada anteriormente como na imagem seguinte:
 
-    ![Crontab -l Output](compass-devsecops-scholarship/sprint-2/nginx-monitoring/imgs/crontab-l.png)
+    ![Crontab -l Output](../imgs/crontab-l.png)
 
 Exemplo das saídas no arquivo de log com o serviço online:
 
-![Logs do Cron Online](compass-devsecops-scholarship/sprint-2/nginx-monitoring/imgs/nginx_online_log_entry.png)
+![Logs do Cron Online](../imgs/nginx_online_log_entry.png)
 
 Exemplo das saídas no arquivo de log com o serviço offline:
 
-![Logs do Cron Offline](compass-devsecops-scholarship/sprint-2/nginx-monitoring/imgs/nginx_offline_log_entry.png)
+![Logs do Cron Offline](../imgs/nginx_offline_log_entry.png)
 
 ## 8. Referências
 

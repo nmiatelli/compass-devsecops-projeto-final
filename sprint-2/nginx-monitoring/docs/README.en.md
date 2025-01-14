@@ -74,9 +74,7 @@ Before creating our EC2 instance, we need to configure the network environment w
 
 #### VPC Workflow Preview
 
-![VPC Workflow](compass-devsecops-scholarship/sprint-2/nginx-monitoring/imgs/nginx-vpc-workflow.png)
-
-
+![VPC Workflow](../imgs/nginx-vpc-workflow.png)
 
 ## 3. EC2 Instance Configuration and Creation
 
@@ -203,7 +201,7 @@ sudo systemctl status nginx
 
 4. If nginx is running correctly, the command will return an output like this:
 
-![Active nginx Status](compass-devsecops-scholarship/sprint-2/nginx-monitoring/imgs/nginx_active_status.png)
+![Active nginx Status](../imgs/nginx_active_status.png)
 
 5. To ensure nginx starts automatically after instance reboot, use the command:
 
@@ -213,7 +211,7 @@ sudo systemctl enable nginx
 
 6. To verify if the server is working, open the browser and type the instance's Elastic IP in the address bar. If everything is correct, the server should show the default nginx page:
 
-![nginx Default Homepage](compass-devsecops-scholarship/sprint-2/nginx-monitoring/imgs/nginx_default_homepage.png)
+![nginx Default Homepage](../imgs/nginx_default_homepage.png)
 
 ## 6. Monitoring Script Creation
 
@@ -333,15 +331,15 @@ After saving the configurations in crontab, script execution will start automati
 
     1.1 The command should return the previously configured task as in the following image:
 
-    ![Crontab -l Output](compass-devsecops-scholarship/sprint-2/nginx-monitoring/imgs/crontab-l.png)
+    ![Crontab -l Output](../imgs/crontab-l.png)
 
 Example of log file outputs with the service online:
 
-![Cron Online Logs](compass-devsecops-scholarship/sprint-2/nginx-monitoring/imgs/nginx_online_log_entry.png)
+![Cron Online Logs](../imgs/nginx_online_log_entry.png)
 
 Example of log file outputs with the service offline:
 
-![Cron Offline Logs](compass-devsecops-scholarship/sprint-2/nginx-monitoring/imgs/nginx_offline_log_entry.png)
+![Cron Offline Logs](../imgs/nginx_offline_log_entry.png)
 
 ## 8. References
 
