@@ -1,5 +1,5 @@
-[![English](https://img.shields.io/badge/English-blue.svg)](compass-devsecops-scholarship/sprint-2/nginx-monitoring/docs/README.en.md)
-[![Português](https://img.shields.io/badge/Português-green.svg)](compass-devsecops-scholarship/sprint-2/nginx-monitoring/docs/README.md)
+[![English](https://img.shields.io/badge/English-blue.svg)](README.en.md)
+[![Português](https://img.shields.io/badge/Português-green.svg)](README.md)
 
 # Automated nginx Monitoring on Ubuntu
 
