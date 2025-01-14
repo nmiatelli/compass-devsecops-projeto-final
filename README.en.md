@@ -24,7 +24,7 @@ Repository dedicated to internship projects at Compass.UOL.
 ### Sprint 2 - Automated nginx Monitoring
 Automated monitoring system for nginx server using AWS infrastructure.
 
-- [Documentação em português](./sprint-2/nginx-monitoring/docs/README.md)
+- [Documentação em Português](./sprint-2/nginx-monitoring/docs/README.md)
 - [Documentation in English](./sprint-2/nginx-monitoring/docs/README.en.md)
 
 ## Technologies Used

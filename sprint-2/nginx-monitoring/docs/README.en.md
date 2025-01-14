@@ -1,3 +1,6 @@
+[![English](https://img.shields.io/badge/English-blue.svg)](/compass-devsecops-scholarship/sprint-2/nginx-monitoring/docs/README.en.md)
+[![Português](https://img.shields.io/badge/Português-green.svg)](/compass-devsecops-scholarship/sprint-2/nginx-monitoring/docs/README.md)
+
 # Automated nginx Monitoring on Ubuntu
 
 ## About the Project
