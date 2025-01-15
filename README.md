@@ -10,12 +10,13 @@ Repositório dedicado aos projetos de estágio na Compass.UOL.
 ```
 .
 ├── sprint-2/
-│   ├── docs/
-│   │   ├── README.md 
-│   │   └── README.en.md
-│   └── imgs/
-│   └── scripts/
-│       └── nginx_status_monitor.sh
+│   ├── nginx-monitoring/
+│   │   ├── docs/
+│   │   │   ├── README.md 
+│   │   │   └── README.en.md
+│   │   ├── imgs/
+│   │   └── scripts/
+│   │       └── nginx_status_monitor.sh
 ├── README.en.md
 └── README.md
 ```
