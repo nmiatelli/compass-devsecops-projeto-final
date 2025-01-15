@@ -9,7 +9,7 @@ Repository dedicated to internship projects at Compass.UOL.
 
 ```
 .
-├── sprint-2/
+├── sprint-1/
 │   ├── nginx-monitoring/
 │   │   ├── docs/
 │   │   │   ├── README.md 
@@ -23,11 +23,11 @@ Repository dedicated to internship projects at Compass.UOL.
 
 ## Projects
 
-### Sprint 2 - Automated nginx Monitoring
+### Sprint 1 - Automated nginx Monitoring
 Automated monitoring system for nginx server using AWS infrastructure.
 
-- [Documentação em Português](./sprint-2/nginx-monitoring/docs/README.md)
-- [Documentation in English](./sprint-2/nginx-monitoring/docs/README.en.md)
+- [Documentação em Português](./sprint-1/nginx-monitoring/docs/README.md)
+- [Documentation in English](./sprint-1/nginx-monitoring/docs/README.en.md)
 
 ## Technologies Used
 
