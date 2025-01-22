@@ -17,8 +17,17 @@ Repository dedicated to internship projects at Compass.UOL.
 │   │   ├── imgs/
 │   │   └── scripts/
 │   │       └── nginx_status_monitor.sh
+├── sprint-2/
+│   ├── wordpress-aws-infra/
+│   │   ├── docs/
+│   │   │   ├── README.md
+│   │   │   └── README.en.md
+│   │   ├── imgs/
+│   │   ├── scripts/
+|   |   └── config/
 ├── README.en.md
-└── README.md
+├── README.md
+└── LICENSE
 ```
 
 ## Projects
@@ -36,4 +45,23 @@ Automated monitoring system for nginx server using AWS infrastructure.
 - Shell Script
 - nginx
 - Git
+
+---
+
+### Sprint 2 - Infraestrutura escalável para WordPress na AWS  
+**Infraestrutura automatizada para deploy de WordPress utilizando Docker, RDS, EFS e Load Balancer na AWS.**
+
+- [Documentação em Português](./sprint-2/wordpress-aws-infra/docs/README.md)  
+- [Documentation in English](./sprint-2/wordpress-aws-infra/docs/README.en.md)  
+
+---
+
+## Tecnologias Utilizadas  
+
+- **AWS**: EC2, RDS, EFS, Load Balancer  
+- **Docker**
+- **MySQL**
+- **EFS**
+- **Shell Script**  
+- **Git**
 
