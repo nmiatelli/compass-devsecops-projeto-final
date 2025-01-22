@@ -38,7 +38,7 @@ Automated monitoring system for nginx server using AWS infrastructure.
 - [Documentação em Português](./sprint-1/nginx-monitoring/docs/README.md)
 - [Documentation in English](./sprint-1/nginx-monitoring/docs/README.en.md)
 
-## Technologies Used
+### Technologies Used
 
 - AWS 
 - Linux
@@ -48,20 +48,20 @@ Automated monitoring system for nginx server using AWS infrastructure.
 
 ---
 
-### Sprint 2 - Infraestrutura escalável para WordPress na AWS  
-**Infraestrutura automatizada para deploy de WordPress utilizando Docker, RDS, EFS e Load Balancer na AWS.**
+### Sprint 2 - AWS Infrastructure for WordPress 
+**Automated infrastructure for WordPress deployment using Docker, RDS, EFS, and Load Balancer on AWS.**
 
-- [Documentação em Português](./sprint-2/wordpress-aws-infra/docs/README.md)  
+- [Documentation in Portuguese](./sprint-2/wordpress-aws-infra/docs/README.md)  
 - [Documentation in English](./sprint-2/wordpress-aws-infra/docs/README.en.md)  
 
 ---
 
-## Tecnologias Utilizadas  
+### Technologies Used  
 
 - **AWS**: EC2, RDS, EFS, Load Balancer  
-- **Docker**
-- **MySQL**
-- **EFS**
+- **Docker**  
+- **MySQL**  
+- **EFS**  
 - **Shell Script**  
 - **Git**
 
