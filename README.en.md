@@ -40,11 +40,11 @@ Automated monitoring system for nginx server using AWS infrastructure.
 
 ### Technologies Used
 
-- AWS 
-- Linux
-- Shell Script
-- nginx
-- Git
+- **AWS**
+- **Linux**
+- **Shell Script**
+- **nginx**
+- **Git**
 
 ---
 
