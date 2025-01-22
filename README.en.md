@@ -48,8 +48,8 @@ Automated monitoring system for nginx server using AWS infrastructure.
 
 ---
 
-### Sprint 2 - AWS Infrastructure for WordPress 
-**Automated infrastructure for WordPress deployment using Docker, RDS, EFS, and Load Balancer on AWS.**
+### Sprint 2 - AWS Infrastructure for WordPress (WIP)
+**Automated infrastructure for WordPress deployment using Docker, RDS, EFS, and load balancing on AWS.**
 
 - [Documentation in Portuguese](./sprint-2/wordpress-aws-infra/docs/README.md)  
 - [Documentation in English](./sprint-2/wordpress-aws-infra/docs/README.en.md)  

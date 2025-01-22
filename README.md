@@ -46,8 +46,8 @@ Repositório dedicado aos projetos de estágio na Compass.UOL.
 - **nginx**
 - **Git**
 ---
-### Sprint 2 - Infraestrutura para WordPress na AWS  
-**Infraestrutura automatizada para deploy do WordPress utilizando Docker, RDS, EFS e Load Balancer na AWS.**
+### Sprint 2 - Infraestrutura para WordPress na AWS (WIP)
+**Infraestrutura automatizada para deploy do WordPress utilizando Docker, RDS, EFS e balanceamento de carga na AWS.**
 
 - [Documentação em Português](./sprint-2/wordpress-aws-infra/docs/README.md)  
 - [Documentation in English](./sprint-2/wordpress-aws-infra/docs/README.en.md)  
