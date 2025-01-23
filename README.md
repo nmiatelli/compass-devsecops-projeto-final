@@ -24,7 +24,7 @@ Repositório dedicado aos projetos de estágio na Compass.UOL.
 │   │   │   └── README.en.md
 │   │   ├── imgs/
 │   │   ├── scripts/
-|   |   └── config/
+│   │   └── config/
 ├── README.en.md
 ├── README.md
 └── LICENSE
