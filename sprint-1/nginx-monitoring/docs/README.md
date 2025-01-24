@@ -1,7 +1,7 @@
 [![English](https://img.shields.io/badge/English-blue.svg)](README.en.md)
 [![Português](https://img.shields.io/badge/Português-green.svg)](README.md)
 
-# Monitoramento Automatizado do nginx no Ubuntu 
+# Monitoramento Automatizado do nginx 
 
 ## Sobre o projeto
 

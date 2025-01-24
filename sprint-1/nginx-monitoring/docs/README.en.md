@@ -1,11 +1,11 @@
 [![English](https://img.shields.io/badge/English-blue.svg)](README.en.md)
 [![Português](https://img.shields.io/badge/Português-green.svg)](README.md)
 
-# Automated nginx Monitoring on Ubuntu
+# Automated nginx Monitoring
 
 ## About the Project
 
-This project involves creating an Amazon EC2 instance with Ubuntu Server 24.04 LTS to set up an nginx server, monitor the service status through a custom script, and automate its execution every 5 minutes. The script records the date, time, service name, status, and a custom ONLINE or OFFLINE message, enabling monitoring of service continuity and availability.
+This project consists on creating an Amazon EC2 instance with Ubuntu Server 24.04 LTS to set up an nginx server, monitor the service status through a custom script, and automate its execution every 5 minutes. The script records the date, time, service name, status, and a custom ONLINE or OFFLINE message, enabling monitoring of service continuity and availability.
 
 ### Table of Contents
 
