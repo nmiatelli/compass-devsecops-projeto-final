@@ -33,7 +33,7 @@ Repositório dedicado aos projetos de estágio na Compass.UOL.
 ## Projetos
 
 ### Sprint 1 - Monitoramento automatizado do nginx
-**Sistema de monitoramento automatizado do nginx utilizando infraestrutura AWS.**
+Sistema de monitoramento automatizado do nginx utilizando infraestrutura AWS.
 
 - [Documentação em Português](./sprint-1/nginx-monitoring/docs/README.md)
 - [Documentation in English](./sprint-1/nginx-monitoring/docs/README.en.md)
@@ -45,16 +45,18 @@ Repositório dedicado aos projetos de estágio na Compass.UOL.
 - **Shell Script**
 - **nginx**
 - **Git**
+
 ---
-### Sprint 2 - Infraestrutura para WordPress na AWS (WIP)
-**Infraestrutura automatizada para deploy do WordPress utilizando Docker, RDS, EFS e balanceamento de carga na AWS.**
+
+### Sprint 2 - Sistema de Alta Disponibilidade de Hospeagem do WordPress na AWS (WIP)
+Infraestrutura para deploy do WordPress utilizando Docker.
 
 - [Documentação em Português](./sprint-2/wordpress-aws-infra/docs/README.md)  
 - [Documentation in English](./sprint-2/wordpress-aws-infra/docs/README.en.md)  
 
 ### Tecnologias Utilizadas  
 
-- **AWS**: EC2, RDS, EFS, Load Balancer  
+- **AWS**: EC2, RDS, EFS, ALB  
 - **Docker** 
 - **MySQL**  
 - **Shell Script** 

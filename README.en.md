@@ -33,7 +33,7 @@ Repository dedicated to internship projects at Compass.UOL.
 ## Projects
 
 ### Sprint 1 - Automated nginx Monitoring
-**Automated nginx service monitoring system using AWS infrastructure.**
+Automated nginx service monitoring system using AWS infrastructure.
 
 - [Documentação em Português](./sprint-1/nginx-monitoring/docs/README.md)
 - [Documentation in English](./sprint-1/nginx-monitoring/docs/README.en.md)
@@ -48,17 +48,15 @@ Repository dedicated to internship projects at Compass.UOL.
 
 ---
 
-### Sprint 2 - AWS Infrastructure for WordPress (WIP)
-**Automated infrastructure for WordPress deployment using Docker, RDS, EFS, and load balancing on AWS.**
+### Sprint 2 - High-Availabilty WordPress AWS Hosting System (WIP)
+Infrastructure for WordPress deployment using Docker.
 
 - [Documentation in Portuguese](./sprint-2/wordpress-aws-infra/docs/README.md)  
 - [Documentation in English](./sprint-2/wordpress-aws-infra/docs/README.en.md)  
 
----
-
 ### Technologies Used  
 
-- **AWS**: EC2, RDS, EFS, Load Balancer  
+- **AWS**: EC2, RDS, EFS, ALB  
 - **Docker**  
 - **MySQL**  
 - **EFS**  
