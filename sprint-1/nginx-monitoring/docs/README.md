@@ -10,7 +10,7 @@ Este projeto consiste na criação de uma instância Amazon EC2 com Ubuntu Serve
 ### Índice
 
 1. [Pré-requisitos](#1-pré-requisitos)
-2. [Configuração do Ambiente Virtual (VPC)](#2-configuração-do-ambiente-virtual-vpc)
+2. [Configuração do Ambiente Virtual](#2-configuração-do-ambiente-virtual)
     - 2.1 [Configuração dos Recursos](#21-configuração-dos-recursos)
     - 2.2 [Criação da VPC](#22-criação-da-vpc)
 3. [Configuração e Criação da Instância EC2](#3-configuração-e-criação-da-instância-ec2)
@@ -34,12 +34,12 @@ Este projeto consiste na criação de uma instância Amazon EC2 com Ubuntu Serve
 - Conhecimento básico do terminal Linux
 - Conhecimento básico do console AWS
 
-## 2. Configuração do Ambiente Virtual (VPC)
+## 2. Configuração do Ambiente Virtual
 
 Antes de criarmos nossa instância EC2, precisamos configurar o ambiente de rede onde ela será executada. Criaremos uma VPC (Virtual Private Cloud) dedicada ao projeto.
 
 > [!NOTE]
-> A AWS oferece duas opções para criação de VPC: manual e automática. Na criação manual,  você configura a VPC, sub-redes, roteadores, gateways e outras opções de rede de forma  personalizada. Já na opção automática, o **VPC wizard** cria a VPC com sub-redes públicas e  privadas, já anexa um gateway de internet, configura as tabelas de rotas e inclui um gateway NAT, caso seja necessário. Utilizaremos a criação automática com o VPC wizard. 
+> A AWS oferece duas opções para criação de VPC: manual e automática. Na criação manual,  você configura a VPC, sub-redes, roteadores, gateways e outras opções de rede de forma  personalizada. Já na opção automática, o **assistente de VPC** cria a VPC com sub-redes públicas e  privadas, já anexa um gateway de internet, configura as tabelas de rotas e inclui um gateway NAT, caso seja necessário. Utilizaremos a criação automática com o VPC wizard. 
 
 ### 2.1 Configuração dos Recursos
  
@@ -64,7 +64,7 @@ Antes de criarmos nossa instância EC2, precisamos configurar o ambiente de rede
 
 1. Clique em "**Criar VPC**" e aguarde a criação dos recursos.
 
-2. O wizard criará automaticamente:
+2. O assistente criará automaticamente:
 
     - Uma VPC com DNS hostnames habilitado
     - Uma sub-rede pública na AZ selecionada

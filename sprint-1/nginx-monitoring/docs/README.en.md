@@ -10,7 +10,7 @@ This project consists on creating an Amazon EC2 instance with Ubuntu Server 24.0
 ### Table of Contents
 
 1. [Prerequisites](#1-prerequisites)
-2. [Virtual Environment Configuration (VPC)](#2-virtual-environment-configuration-vpc)
+2. [Virtual Environment Configuration](#2-virtual-environment-configuration)
     - 2.1 [Resource Configuration](#21-resource-configuration)
     - 2.2 [VPC Creation](#22-vpc-creation)
 3. [EC2 Instance Configuration and Creation](#3-ec2-instance-configuration-and-creation)
@@ -31,10 +31,10 @@ This project consists on creating an Amazon EC2 instance with Ubuntu Server 24.0
 ## 1. Prerequisites
 
 - An active AWS account
+- Basic knowledge of the AWS console
 - Basic Linux terminal knowledge
-- Basic AWS console knowledge
 
-## 2. Virtual Environment Configuration (VPC)
+## 2. Virtual Environment Configuration 
 
 Before creating our EC2 instance, we need to configure the network environment where it will run. We'll create a VPC (Virtual Private Cloud) dedicated to the project.
 
@@ -51,7 +51,7 @@ Before creating our EC2 instance, we need to configure the network environment w
 
 4. Configure the resources:
 
-    - VPC CIDR: 10.0.0.0/24 (provides 256 IP addresses, sufficient for the project)
+    - VPC CIDR: 10.0.0.0/24 (provides 256 IP addresses, enough for the project)
     - Number of Availability Zones (AZs): 1
     - Number of public subnets: 1
     - Number of private subnets: 0
