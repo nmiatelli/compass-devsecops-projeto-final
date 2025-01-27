@@ -1,7 +1,7 @@
 [![English](https://img.shields.io/badge/English-blue.svg)](README.en.md)
 [![Português](https://img.shields.io/badge/Português-green.svg)](README.md)
 
-# Sistema de Alta Disponibilidade de Hospeagem do WordPress
+# Sistema de Alta Disponibilidade de Hospedagem do WordPress
 
 ## Sobre o Projeto
 
@@ -13,6 +13,8 @@ Este projeto consiste na implementação de uma infraestrutura escalável para h
 2. [Configuração do Ambiente Virtual](#2-configuração-do-ambiente-virtual)
     - 2.1 [Configuração dos Recursos](#21-configuração-dos-recursos)
     - 2.2 [Criação da VPC](#22-criação-da-vpc)
+
+## 1. Pré-requisitos
 
 - Uma conta ativa na AWS
 - Conhecimento básico do console AWS
