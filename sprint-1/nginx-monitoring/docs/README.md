@@ -100,7 +100,7 @@ Criaremos uma instância EC2 utilizando uma AMI do Ubuntu Server 24.04 LTS e ire
 
     - Tipo: HTTP
     - Porta: 80
-    - Tipo de origem: Qualquer local-ipv4 (0.0.0.0/0)
+    - Tipo de origem: qualquer local-ipv4 (0.0.0.0/0)
 
 7. Verifique as regras de saída (Outbound rules):
 

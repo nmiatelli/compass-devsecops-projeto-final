@@ -13,6 +13,9 @@ Este projeto consiste na implementação de uma infraestrutura escalável para h
 2. [Configuração do Ambiente Virtual](#2-configuração-do-ambiente-virtual)
     - 2.1 [Configuração dos Recursos](#21-configuração-dos-recursos)
     - 2.2 [Criação da VPC](#22-criação-da-vpc)
+3. [Configuração dos Grupos de Segurança](#3-configuração-dos-grupos-de-segurança)
+    - 3.1 [Criação dos Placeholders](#31-criação-dos-placeholders)
+    - 3.2 [Configuração das Regras de Entrada e Saída](#32-configuração-das-regras-de-entrada-e-saída)
 
 ## 1. Pré-requisitos
 
@@ -49,7 +52,6 @@ Antes de criarmos as instâncias EC2 que hospedarão as aplicações do WordPres
 
 6. Opcionalmente, adicione tags descritivas à VPC. Isso ajuda a identificar facilmente os recursos associados ao projeto.
 
-
 ## 2.2 Criação da VPC 
 
 1. Clique em "**Criar VPC**" e aguarde a criação dos recursos.
@@ -70,4 +72,139 @@ Antes de criarmos as instâncias EC2 que hospedarão as aplicações do WordPres
 
     #### Preview do VPC Workflow
 
-    ![VPC Workflow](../imgs/vpc-workflow-ptbr.png)
+![VPC Workflow](../imgs/vpc-workflow-ptbr.png)
+
+## 3. Configuração dos Grupos de Segurança
+
+Como cada recurso exige regras de tráfego distintas, criaremos grupos de segurança específicos para cada um deles, de modo a separar as responsabilidades, facilitar o gerenciamento e aumentar a segurança.
+
+### 3.1 Criação dos Placeholders
+
+> [!IMPORTANT]
+> Neste primeiro momento, criaremos apenas os grupos sem nenhuma regra de tráfego. Isso é necessário porque alguns grupos precisarão referenciar outros em suas regras de entrada ou saída.
+
+No **Painel da VPC**, navegue até a seção "**Segurança**" e clique em "**Grupos de segurança**". Após isso, clique em "**Criar grupo de segurança**".
+
+Criaremos um grupo de segurança para o balanceador de carga, as instâncias EC2, o EFS e o RDS. Para cada grupo de segurança, preencheremos:
+
+    - Nome do grupo de segurança 
+    - Descrição
+    - ID da VPC (selecione a VPC criada para o projeto)
+
+### 3.2 Configuração das Regras de Entrada e Saída
+
+Após criados os grupos de segurança, daremos sequência à configuração das regras de entrada e saída de cada um deles.
+
+#### 3.3 Grupo de Segurança do Application Load Balancer (ALB)
+
+1. Selecione o grupo de segurança do ALB, clique em "**Ações**" e "**Editar regras de entrada**".
+
+2. Em "**Regras de entrada**", clique em "**Adicionar regra**".
+
+3. Adicione uma regra para o "**HTTP**":
+
+    - Tipo: HTTP
+    - Porta: 80
+    - Tipo de origem: qualquer local-ipv4 (0.0.0.0/0)
+
+4. Clique em "**Salvar regras**".
+
+5. Selecione o grupo de segurança do ALB novamente, clique em "**Ações**" e "**Editar regras de saída**".
+
+6. Em "**regras de saída**", clique em "**Adicionar regra**".
+
+7. Adicione uma regra para permitir tráfego para as instâncias EC2:
+
+    - Tipo: personalizado
+    - Porta: 80 
+    - Tipo de destino: selecione o "**grupo de segurança das instâncias EC2**"
+
+8. Clique em "**Salvar regras**".
+
+### 3.4 Grupo de Segurança das Instâncias EC2
+
+1. Selecione o grupo de segurança das instâncias EC2, clique em "**Ações**" e "**Editar regras de entrada**".
+
+2. Em "**Regras de entrada**", clique em "**Adicionar regra**".
+
+3. Adicione uma regra para o "**HTTP**":
+
+    - Tipo: HTTP
+    - Porta: 80
+    - Tipo de origem: selecione o "**grupo de segurança do ALB**"
+
+4. Adicione uma regra para o **SSH**:
+
+    - Tipo: SSH
+    - Porta: 22
+    - Tipo de origem: seu endereço de IP (use "**Meu IP**" para adicionar automaticamente)
+
+5. Adicione uma regra para o "**NFS**":
+
+    - Tipo: NFS
+    - Porta: 2049
+    - Tipo de origem: selecione o "**grupo de segurança do EFS**"
+
+6. Clique em "**Salvar regras**".
+
+7. Selecione o grupo de segurança das instâncias EC2 novamente, clique em "**Ações**" e "**Editar regras de saída**".
+
+8. Em "**regras de saída**", clique em "**Adicionar regra**".
+
+9. Adicione uma regra para permitir tráfego para o "**RDS**":
+
+    - Tipo: personalizado
+    - Porta: 3306 
+    - Tipo de destino: selecione o "**grupo de segurança do RDS**"
+
+10. Adicione uma regra para permitir tráfego para o "**EFS**":
+
+    - Tipo: personalizado
+    - Porta: 2049 
+    - Tipo de destino: selecione o "**grupo de segurança do EFS**"
+
+11. Adicione uma regra para o "**HTTPS**":
+
+    - Tipo: HTTPS
+    - Porta: 443 
+    - Tipo de destino: 0.0.0.0/0 (para atualizações de pacotes ou chamadas externas)
+
+12. Clique em "**Salvar regras**".
+
+#### 3.5 Grupo de Segurança do Elastic File System (EFS)
+
+1. Selecione o grupo de segurança do EFS, clique em "**Ações**" e "**Editar regras de saída**".
+
+2. Em "**Regras de entrada**", clique em "**Adicionar regra**".
+
+3. Adicione uma regra para o "**NFS**":
+
+    - Tipo: NFS
+    - Porta: 2049
+    - Tipo de origem: selecione o "**grupo de segurança das instâncias EC2**"
+
+4. Clique em "**Salvar regras**".
+
+5. Em "**Regras de saída**":
+
+    - Como o EFS não inicia conexões, não é necessário adicionar regras de saída
+
+#### 3.5 Grupo de Segurança do Relational Database Service (RDS)
+
+1. Selecione o grupo de segurança do RDS, clique em "**Ações**" e "**Editar regras de saída**".
+
+2. Em "**Regras de entrada**", clique em "**Adicionar regra"**.
+
+3. Adicione uma regra para o "**MySQL/Aurora**":
+
+    - Tipo: MySQL/Aurora
+    - Porta: 3306
+    - Tipo de origem: selecione o "**grupo de segurança das instâncias EC2**"
+
+4. Clique em "**Salvar regras**".
+
+5. Em "**Regras de saída"**:
+
+    - Como o RDS não inicia conexões, não é necessário adicionar regras de saída
+
+
