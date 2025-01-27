@@ -5,7 +5,7 @@
 
 ## Sobre o Projeto
 
-Este projeto consiste na implementação de uma infraestrutura escalável para hospedar uma aplicação WordPress na AWS. A solução envolve a instalação e configuração do Docker em instâncias EC2, utilizando um script de inicialização (`user_data.sh`) para automatizar o processo. Além disso, o projeto inclui a configuração de um banco de dados MySQL gerenciado pelo Amazon RDS, a integração do Amazon EFS para armazenamento de arquivos estáticos do WordPress e a implementação de um Application Load Balancer para distribuir o tráfego entre instâncias em múltiplas Zonas de Disponibilidade, garantindo alta disponibilidade. As instâncias EC2 são gerenciadas por um Auto Scaling Group, que ajusta automaticamente a capacidade com base na demanda, assegurando que a aplicação escale de forma eficiente e permaneça disponível mesmo em picos de tráfego.
+Este projeto consiste na implementação de uma infraestrutura escalável para hospedar aplicações WordPress na AWS. A solução envolve a instalação e configuração do Docker em instâncias EC2, utilizando um script de inicialização (`user_data.sh`) para automatizar o processo. Além disso, o projeto inclui a configuração de um banco de dados MySQL gerenciado pelo Amazon RDS, a integração do Amazon EFS para o compartilhamento de arquivos estáticos entre as instâncias EC2 que hospedam o WordPress e a implementação de um Application Load Balancer para distribuir o tráfego entre instâncias em múltiplas Zonas de Disponibilidade, garantindo alta disponibilidade. As instâncias EC2 são gerenciadas por um Auto Scaling Group, que ajusta automaticamente a capacidade com base na demanda, assegurando que a aplicação escale de forma eficiente e permaneça disponível mesmo em picos de tráfego.
 
 ### Índice
 
@@ -30,7 +30,7 @@ Antes de criarmos as instâncias EC2 que hospedarão as aplicações do WordPres
  
 1. No console AWS, acesse o serviço VPC e clique em "**Criar VPC**".
 
-2. 
+2. Em "**Configurações da VPC**" selecione "**VPC e muito mais**"
 
 3. Em "**Geração automática de etiqueta de nome**", deixe marcado para gerar os nomes automaticamente.
 
@@ -38,12 +38,15 @@ Antes de criarmos as instâncias EC2 que hospedarão as aplicações do WordPres
 
 5. Configure os recursos:
 
-- CIDR da VPC: 10.0.0.0/24 (fornece 256 endereços IP, suficiente para o projeto)
+    - CIDR da VPC: 10.0.0.0/16
     - Número de zonas de disponibilidade (AZs): 2
     - Número de sub-redes públicas: 2
     - Número de sub-redes privadas: 4 
     - Gateway NAT: 1 por AZ
     - VPC endpoints: Nenhuma 
+
+6. Opcionalmente, adicione tags descritivas à VPC. Isso ajuda a identificar facilmente os recursos associados ao projeto.
+
 
 ## 2.2 Criação da VPC 
 
