@@ -5,7 +5,7 @@
 
 ## Sobre o Projeto
 
-Este projeto consiste na implementação de uma infraestrutura escalável para hospedar aplicações WordPress na AWS. A solução envolve a instalação e configuração do Docker em instâncias EC2, utilizando um script de inicialização para automatizar o processo. Além disso, o projeto inclui a configuração de um banco de dados MySQL gerenciado pelo Amazon RDS, a integração do Amazon EFS para o compartilhamento de arquivos estáticos entre as instâncias EC2 que hospedam o WordPress e a implementação de um Application Load Balancer para distribuir o tráfego entre instâncias em múltiplas Zonas de Disponibilidade, garantindo alta disponibilidade. As instâncias EC2 são gerenciadas por um Auto Scaling Group, que ajusta automaticamente a capacidade com base na demanda, assegurando que a aplicação escale de forma eficiente e permaneça disponível mesmo em picos de tráfego.
+Este projeto consiste na implementação de uma infraestrutura escalável para hospedar aplicações WordPress na AWS. A solução envolve a instalação e configuração do Docker em instâncias EC2, utilizando um script de inicialização para automatizar o processo. Além disso, o projeto inclui a configuração de um banco de dados MySQL gerenciado pelo Amazon RDS, a integração do Amazon EFS para o compartilhamento de arquivos entre as instâncias EC2 que hospedam o WordPress e a implementação de um Application Load Balancer para distribuir o tráfego entre instâncias em múltiplas Zonas de Disponibilidade, garantindo alta disponibilidade. As instâncias EC2 são gerenciadas por um Auto Scaling Group, que ajusta automaticamente a capacidade com base na demanda, assegurando que a aplicação escale de forma eficiente e permaneça disponível mesmo em picos de tráfego.
 
 ### Índice
 
@@ -14,8 +14,13 @@ Este projeto consiste na implementação de uma infraestrutura escalável para h
     - 2.1 [Configuração dos Recursos](#21-configuração-dos-recursos)
     - 2.2 [Criação da VPC](#22-criação-da-vpc)
 3. [Configuração dos Grupos de Segurança](#3-configuração-dos-grupos-de-segurança)
-    - 3.1 [Criação dos Placeholders](#31-criação-dos-placeholders)
+    - 3.1 [Criação dos Grupos de Segurança](#31-criação-dos-grupos-de-segurança)
     - 3.2 [Configuração das Regras de Entrada e Saída](#32-configuração-das-regras-de-entrada-e-saída)
+4. [Configuração do Elastic File System (EFS)](#4-configuração-do-elastic-file-system-efs)
+    - 4.1 [Configurações Gerais](#41-configurações-gerais)
+    - 4.2 [Configurações de rede](#42-configurações-de-rede)
+    - 4.3 [Política do Sistema de Arquivos](#43-política-do-sistema-de-arquivos)
+    - 4.4 [Revisão das Configurações](#44-revisão-das-configurações)
 
 ## 1. Pré-requisitos
 
@@ -60,7 +65,7 @@ Antes de criarmos as instâncias EC2 que hospedarão as aplicações do WordPres
 
     - Uma VPC com DNS hostnames habilitados
     - Duas sub-redes públicas, um em cada Zona de Disponibilidade (AZ) selecionada
-    - Duas sub-redes privadas, um em cada AZ selecionada, para os servidores de aplicação e armazenamento do banco de dados
+    - Duas sub-redes privadas, um em cada AZ selecionada, para os servidores das aplicações e armazenamento do banco de dados
     - Um Internet Gateway (IGW) anexado à VPC 
     - Dois NAT Gateways, um em cada sub-rede pública, para permitir acesso à internet para as sub-redes privadas
     - Tabelas de rota configuradas para:
@@ -78,10 +83,10 @@ Antes de criarmos as instâncias EC2 que hospedarão as aplicações do WordPres
 
 Como cada recurso exige regras de tráfego distintas, criaremos grupos de segurança específicos para cada um deles, de modo a separar as responsabilidades, facilitar o gerenciamento e aumentar a segurança.
 
-### 3.1 Criação dos Placeholders
+### 3.1 Criação dos Grupos de Segurança
 
 > [!IMPORTANT]
-> Nesse primeiro momento, criaremos apenas os grupos sem nenhuma regra de tráfego. Isso é necessário porque alguns grupos precisarão referenciar outros em suas regras de entrada ou saída.
+> Nesse primeiro momento, criaremos apenas os grupos de segurança, sem nenhuma regra de tráfego. Isso é necessário porque alguns grupos de segurança precisarão referenciar outros em suas regras de entrada ou saída.
 
 No **Painel da VPC**, navegue até a seção "**Segurança**" e clique em "**Grupos de segurança**". Após isso, clique em "**Criar grupo de segurança**".
 
@@ -200,5 +205,67 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
 5. Verifique as "**Regras de saída**":
 
     - Como o RDS não inicia conexões, não é necessário configurar regras de saída
+
+## 4. Configuração do Elastic File System (EFS)
+
+Iremos configurar um sistema de arquivos elástico para que as instâncias que hospedam o WordPress possam compartilhar arquivos mesmo em diferentes zonas de disponibilidade.
+
+#### 4.1 Configurações Gerais
+
+1. Na barra de pesquisa do console AWS, procure por "**EFS**".
+
+2. Na página inicial do serviço, clique em "**Criar sistema de arquivos**" e "**Personalizar**".
+
+3. Dê um nome ao sistema de arquivos.
+
+4. Em "**Tipo do sistema de arquivos**", selecione "**Regional**".
+
+5. Mantenha as **configurações gerais** padrão:
+
+    - Backup automático: **Habilitado**
+    - Gerenciamento de ciclo de vida: 
+        - Transição para Infrequent Access: **30 dias desde o último acesso**
+        - Transição para Archive: **90 dias desde o último acesso**
+        - Transilção para o Padrão: **Nenhum**
+    - Criptografia: **Habilitado**
+
+6. Mantenha as **configurações de performance** padrão:
+
+    - Modo de taxa de transferência: "**Avançado**" e "**Elastic**"
+
+7. Verifique as **configurações adicionais** e cerfique-se de que "**Uso geral**" está selecionado. 
+
+8. Opcionalmente, adicione tags descritivas ao sistema de arquivos para melhorar a identificação dos recursos.
+
+9. Clique em "**Próximo**".
+
+#### 4.2 Configurações de Rede
+
+1. Em "**Rede**", selecione a VPC criada para o projeto. 
+
+2. Em "**Destinos de montagem**", adicionaremos dois destinos de montagem, um para cada zona de disponibilidade: 
+
+    AZ 1:
+        - Zona de disponibilidade: "**us-east-1a**"
+        - ID da sub-rede: selecione a sub-rede **privada** disponível
+        - Endereço de IP: mantenha o padrão ("**Automático**")
+        - Grupos de segurança: selecione o **grupo de segurança do EFS**
+    AZ 2:
+        - Zona de disponibilidade: "**us-east-1b**"
+        - ID da sub-rede: selecione a sub-rede **privada** disponível
+        - Endereço de IP: mantenha o padrão ("**Automático**")
+        - Grupos de segurança: selecione o **grupo de segurança do EFS**
+
+3. Clique em "**Próximo**".
+
+#### 4.3 Política do sistema de arquivos
+
+Mantenha todas as opções como padrão e clique em "**Próximo**".
+
+#### 4.4 Revisão das Configurações
+
+Nessa etapa, verifique todas as configurações. Se tudo estiver conforme configurado nas etapas anteriores, clique em "**Criar**".
+
+
 
 
