@@ -96,7 +96,7 @@ Criaremos uma instância EC2 utilizando uma AMI do Ubuntu Server 24.04 LTS e ire
     - Porta: 22
     - Tipo de origem: seu endereço de IP (use "**Meu IP**" para adicionar automaticamente)
 
-6. Adicione uma regra para o "**HTTP**":
+6. Adicione uma regra para o **HTTP**:
 
     - Tipo: HTTP
     - Porta: 80
