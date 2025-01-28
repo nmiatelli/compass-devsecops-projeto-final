@@ -246,15 +246,16 @@ Iremos configurar um sistema de arquivos elástico para que as instâncias que h
 2. Em "**Destinos de montagem**", adicionaremos dois destinos de montagem, um para cada zona de disponibilidade: 
 
     AZ 1:
-        - Zona de disponibilidade: "**us-east-1a**"
-        - ID da sub-rede: selecione a sub-rede **privada** disponível
-        - Endereço de IP: mantenha o padrão ("**Automático**")
-        - Grupos de segurança: selecione o **grupo de segurança do EFS**
+    - Zona de disponibilidade: "**us-east-1a**"
+    - ID da sub-rede: selecione a sub-rede **privada** disponível
+    - Endereço de IP: mantenha o padrão ("**Automático**")
+    - Grupos de segurança: selecione o **grupo de segurança do EFS**
+   
     AZ 2:
-        - Zona de disponibilidade: "**us-east-1b**"
-        - ID da sub-rede: selecione a sub-rede **privada** disponível
-        - Endereço de IP: mantenha o padrão ("**Automático**")
-        - Grupos de segurança: selecione o **grupo de segurança do EFS**
+    - Zona de disponibilidade: "**us-east-1b**"
+    - ID da sub-rede: selecione a sub-rede **privada** disponível
+    - Endereço de IP: mantenha o padrão ("**Automático**")
+    - Grupos de segurança: selecione o **grupo de segurança do EFS**
 
 3. Clique em "**Próximo**".
 
