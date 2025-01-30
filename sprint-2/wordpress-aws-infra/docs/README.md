@@ -18,9 +18,15 @@ Este projeto consiste na implementação de uma infraestrutura escalável para h
     - 3.2 [Configuração das Regras de Entrada e Saída](#32-configuração-das-regras-de-entrada-e-saída)
 4. [Configuração do Elastic File System (EFS)](#4-configuração-do-elastic-file-system-efs)
     - 4.1 [Configurações Gerais](#41-configurações-gerais)
-    - 4.2 [Configurações de rede](#42-configurações-de-rede)
+    - 4.2 [Configurações de Rede](#42-configurações-de-rede)
     - 4.3 [Política do Sistema de Arquivos](#43-política-do-sistema-de-arquivos)
     - 4.4 [Revisão das Configurações](#44-revisão-das-configurações)
+5. [Configurações do Relational Database Service (RDS)](#5-configuração-do-relational-database-service-rds)
+    - 5.1 [Configurações Gerais](#51-configurações-gerais)
+    - 5.2 [Configurações de Rede](#52-configurações-de-rede)
+    - 5.3 [Configurações de Auntenticação](#53-configurações-de-autenticação)
+    - 5.4 [Configurações Adicionais](#54-configurações-adicionais)
+    
 
 ## 1. Pré-requisitos
 
@@ -226,7 +232,7 @@ Iremos configurar um sistema de arquivos elástico para que as instâncias que h
     - Gerenciamento de ciclo de vida: 
         - Transição para Infrequent Access: **30 dias desde o último acesso**
         - Transição para Archive: **90 dias desde o último acesso**
-        - Transilção para o Padrão: **Nenhum**
+        - Transição para o Padrão: **Nenhum**
     - Criptografia: **Habilitado**
 
 6. Mantenha as **configurações de performance** padrão:
@@ -259,7 +265,7 @@ Iremos configurar um sistema de arquivos elástico para que as instâncias que h
 
 3. Clique em "**Próximo**".
 
-#### 4.3 Política do sistema de arquivos
+#### 4.3 Política do Sistema de Arquivos
 
 Mantenha todas as opções como padrão e clique em "**Próximo**".
 
@@ -267,6 +273,59 @@ Mantenha todas as opções como padrão e clique em "**Próximo**".
 
 Nessa etapa, verifique todas as configurações. Se tudo estiver conforme configurado nas etapas anteriores, clique em "**Criar**".
 
+## 5. Configuração do Relational Database Service (RDS)
 
+Iremos configurar o Amazon RDS para garantir que ambas as aplicações do WordPress tenham uma base de dados persistente e escalável, com alta disponibilidade entre diferentes zonas de disponibilidade. O RDS é um serviço gerenciado de banco de dados que facilita a configuração, operação e escalabilidade de vários tipos de bancos de dados, como MySQL, PostgreSQL, MariaDB, Oracle e SQL Server, com backups automáticos, failover e segurança integrados. Para esse projeto, iremos utilizar uma instância do **MySQL** no RDS.
 
+#### 5.1 Configurações Gerais
 
+1. Na barra de pesquisa do console AWS, procure por "**RDS**".
+
+2. Na página inicial do serviço, clique em "**Criar banco de dados**". 
+
+3. Selecione "**Criação padrão**".
+
+4. Em "**Opções de mecanismo**", selecione o banco de dados "**MySQL**" e mantenha a versão do mecanismo padrão.
+
+5. Em "**Modelos**", selecione "**Nível gratuito**".
+
+6. Em "**Configurações**", dê um nome descritivo à instância do banco de dados.
+
+7. Em "**Configurações de credenciais**", digite um nome de usuário para a instância do banco de dados. Esse será o ID do usuário principal do banco de dados.
+
+8. Em "**Gerenciamento de credenciais**", selecione "**Configurações de credenciais**". Nessa opção, o RDS gera uma senha e a gerencia durante todo o ciclo de vida usando o **AWS Secrets Manager**.
+
+9. Em "**COnfiguração da instância**", selecione "**db.t3.micro**".
+
+10. Em "**Armazenamento**", mantenha as opções padrão.
+
+#### 5.2 Configurações de Rede
+
+1. Em "**Conectividade**", selecione "**Não se conectar a um recurso de computação do EC2**". Iremos configurar a conexão às instâncias EC2 manualmente mais tarde.
+
+2. Em "**Nuvem privada virtual (VPC)**", selecione a VPC criada para o projeto.
+
+3. Em "**Grupo de sub-redes de banco de dados**", selecione a opção *""Criar novo grupo de sub-redes do banco de dados**".
+
+4. Em "**Acesso público**", selecione a opção "**Não**".
+
+5. Em "**Grupo de segurança de VPC (firewall)**", selecione a opção "**Selecionar existente**", e, em "**Grupos de segurança da VPC existentes**", selecione o **grupo de segurança do RDS** criado anteriormente.
+
+6. Em "**Zona de disponibilidade**", selecione a opção "**Sem preferência**".
+
+#### 5.3 Configurações de Autenticação 
+
+1. Em "**Autenticação de banco de dados**", selecione a opção "**Autenticação de senha**".
+
+#### 5.4 Configurações Adicionais
+
+1. Em "**Nome do banco de dados inicial**", dê um nome descritivo ao banco de dados.
+
+> [!IMPORTANT]
+> É recomendável especificar um nome de banco de dados ao criar o RDS. Caso contrário, o RDS criará apenas a instância do MySQL sem um banco de dados dentro dela, e você precisará criá-lo manualmente depois.
+
+2. Mantenha as demais configurações (Backup, Criptografia, Logs, etc.) padrão.
+
+3. Em "**Custos mensais estimados**", revise as informações e certifique-se de que o uso se enquadra no nível gratuito.
+
+4. Se tudo estiver conforme configurado nas etapas anteriores, clique em "**Criar banco de dados**".
