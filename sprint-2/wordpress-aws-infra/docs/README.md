@@ -5,13 +5,13 @@
 
 ## Sobre o Projeto
 
-Este projeto consiste na implementação de uma infraestrutura escalável para hospedar aplicações WordPress na AWS. A solução envolve a instalação e configuração do Docker em instâncias EC2, utilizando um script de inicialização para automatizar o processo. Além disso, o projeto inclui a configuração de um banco de dados MySQL gerenciado pelo Amazon RDS, a integração do Amazon EFS para o compartilhamento de arquivos entre as instâncias EC2 que hospedam o WordPress e a implementação de um Application Load Balancer para distribuir o tráfego entre instâncias em múltiplas Zonas de Disponibilidade, garantindo alta disponibilidade. As instâncias EC2 são gerenciadas por um Auto Scaling Group, que ajusta automaticamente a capacidade com base na demanda, assegurando que a aplicação escale de forma eficiente e permaneça disponível mesmo em picos de tráfego.
+Esse projeto consiste na implementação de uma infraestrutura escalável para hospedar aplicações WordPress na AWS. A solução envolve a instalação e configuração do Docker em instâncias EC2, utilizando um script de inicialização para automatizar o processo. Além disso, o projeto inclui a configuração de um banco de dados MySQL gerenciado pelo Amazon RDS, a integração do Amazon EFS para o compartilhamento de arquivos entre as instâncias EC2 que hospedam o WordPress e a implementação de um Application Load Balancer para distribuir o tráfego entre instâncias em múltiplas Zonas de Disponibilidade, garantindo alta disponibilidade. As instâncias EC2 são gerenciadas por um Auto Scaling Group, que ajusta automaticamente a capacidade com base na demanda, assegurando que a aplicação escale de forma eficiente e permaneça disponível mesmo em picos de tráfego.
 
 ### Índice
 
 1. [Pré-requisitos](#1-pré-requisitos)
 2. [Configuração do Ambiente Virtual](#2-configuração-do-ambiente-virtual)
-    - 2.1 [Configuração dos Recursos](#21-configuração-dos-recursos)
+    - 2.1 [Configurações Gerais](#21-configurações-gerais)
     - 2.2 [Criação da VPC](#22-criação-da-vpc)
 3. [Configuração dos Grupos de Segurança](#3-configuração-dos-grupos-de-segurança)
     - 3.1 [Criação dos Grupos de Segurança](#31-criação-dos-grupos-de-segurança)
@@ -24,8 +24,10 @@ Este projeto consiste na implementação de uma infraestrutura escalável para h
 5. [Configurações do Relational Database Service (RDS)](#5-configuração-do-relational-database-service-rds)
     - 5.1 [Configurações Gerais](#51-configurações-gerais)
     - 5.2 [Configurações de Rede](#52-configurações-de-rede)
-    - 5.3 [Configurações de Auntenticação](#53-configurações-de-autenticação)
+    - 5.3 [Configurações de Autenticação](#53-configurações-de-autenticação)
     - 5.4 [Configurações Adicionais](#54-configurações-adicionais)
+6. [Configuração do Application Load Balancer](#6-configuração-do-application-load-balancer)
+    - 6.1 []()
     
 
 ## 1. Pré-requisitos
@@ -42,7 +44,7 @@ Antes de criarmos as instâncias EC2 que hospedarão as aplicações do WordPres
 > [!NOTE]
 > A AWS oferece duas opções para criação de VPC: manual e automática. Na criação manual,  você configura a VPC, sub-redes, roteadores, gateways e outras opções de rede de forma  personalizada. Já na opção automática, o **assistente de VPC** cria a VPC com sub-redes públicas e  privadas, já anexa um gateway de internet, configura as tabelas de rotas e inclui um gateway NAT, caso seja necessário. Utilizaremos a criação automática com o VPC wizard. 
 
-### 2.1 Configuração dos Recursos
+### 2.1 Configuração Gerais
  
 1. No console AWS, acesse o serviço VPC e clique em "**Criar VPC**".
 
@@ -92,7 +94,7 @@ Como cada recurso exige regras de tráfego distintas, criaremos grupos de segura
 ### 3.1 Criação dos Grupos de Segurança
 
 > [!IMPORTANT]
-> Nesse primeiro momento, criaremos apenas os grupos de segurança, sem nenhuma regra de tráfego. Isso é necessário porque alguns grupos de segurança precisarão referenciar outros em suas regras de entrada ou saída.
+> Nesse primeiro momento, criaremos apenas os grupos de segurança, sem nenhuma regra de tráfego. Isso é necessário porque alguns grupos de segurança precisarão referenciar outros em suas regras de entrada ou saída em etapas futuras.
 
 No **Painel da VPC**, navegue até a seção "**Segurança**" e clique em "**Grupos de segurança**". Após isso, clique em "**Criar grupo de segurança**".
 
@@ -126,7 +128,7 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
 
 7. Como o ALB já encaminha o tráfego para as instâncias EC2 via **grupos de destino**, não é necessário configurar regras de saída
 
-### 3.4 Grupo de Segurança das Instâncias EC2
+#### 3.4 Grupo de Segurança das Instâncias EC2
 
 1. Selecione o grupo de segurança das instâncias EC2, clique em "**Ações**" e "**Editar regras de entrada**".
 
@@ -194,7 +196,7 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
 
     - Como o EFS não inicia conexões, não é necessário configurar regras de saída
 
-#### 3.5 Grupo de Segurança do Relational Database Service (RDS)
+#### 3.6 Grupo de Segurança do Relational Database Service (RDS)
 
 1. Selecione o grupo de segurança do RDS, clique em "**Ações**" e "**Editar regras de saída**".
 
@@ -253,13 +255,13 @@ Iremos configurar um sistema de arquivos elástico para que as instâncias que h
 
     AZ 1:
     - Zona de disponibilidade: "**us-east-1a**"
-    - ID da sub-rede: selecione a sub-rede **privada** disponível
+    - ID da sub-rede: selecione a **sub-rede privada** disponível
     - Endereço de IP: mantenha o padrão ("**Automático**")
     - Grupos de segurança: selecione o **grupo de segurança do EFS**
    
     AZ 2:
     - Zona de disponibilidade: "**us-east-1b**"
-    - ID da sub-rede: selecione a sub-rede **privada** disponível
+    - ID da sub-rede: selecione a **sub-rede privada** disponível
     - Endereço de IP: mantenha o padrão ("**Automático**")
     - Grupos de segurança: selecione o **grupo de segurança do EFS**
 
@@ -329,3 +331,49 @@ Iremos configurar o Amazon RDS para garantir que ambas as aplicações do WordPr
 3. Em "**Custos mensais estimados**", revise as informações e certifique-se de que o uso se enquadra no nível gratuito.
 
 4. Se tudo estiver conforme configurado nas etapas anteriores, clique em "**Criar banco de dados**".
+
+## 6. Configuração do Application Load Balancer
+
+O serviço de **Elastic Load Balancing** distribui automaticamente o tráfego entre vários alvos, como instâncias EC2, contêineres e IPs, em múltiplas zonas de disponibilidade. Ele monitora a saúde dos alvos e encaminha requisições apenas para os que estão operacionais, ajustando sua capacidade conforme a demanda. A AWS oferece diferentes tipos de balanceadores de carga. Para esse projeto, utilizaremos o **Application Load Balancer (ALB)**, que opera na camada 7 (Aplicação) do modelo OSI, sendo o ideal para distribuir tráfego HTTP para as instâncias EC2 que hospedam o WordPress.
+
+#### 6.1 Configurações Gerais
+
+1. Na barra de pesquisa do console AWS, procure por "**Balanceadores de carga**".
+
+2. Clique em "**Criar load balancer**".
+
+3. Como **tipo de load balancer**, selecione "**Application Load Balancer**" e clique em "**Criar**".
+
+4. Dê um nome descritivo ao load balancer.
+
+5. Em "**Esquema**", selecione "**Voltado para a internet**".
+
+6. Em "**Tipo de endereço IP do balanceador de carga**", mantenha padrão (**IPv4**).
+
+#### 6.2 Configurações de Rede
+
+1. Em "**Mapeamento de rede**", selecione a VPC criada para o projeto.
+
+2. Em "**Mapeamentos**", selecione as duas zonas de disponibilidade (**us-east-1a** e **us-east-1b**) e selecione uma **sub-rede pública** em cada uma delas.
+
+3. Em "**Grupos de segurança**", selecione o **grupo de segurança do ALB**.
+
+4. Em "**Listeners e roteamento**", certifique-se de que o protocolo **HTTP** está selecionado (Porta **80**).
+
+5. Em "**Ação padrão**", abaixo da barra de seleção do grupo de destino, clique em "**Criar grupo de destino**".
+
+6. Crie um grupo de destino para as **instâncias EC2**:
+
+    - Tipo de destino: **Instâncias**
+    - Nome do grupo de destino: dê um nome descritivo
+    - Protocolo e Porta: **HTTP:80**
+
+7. Em "**VPC**", certifique-se de que a VPC criada para o projeto está selecionada. 
+
+8. Mantenha as demais opções padrão e clique em "**Próximo**".
+
+9. Em "**Registrar destinos**", pularemos essa etapa de registro das instâncias EC2 manualmente no grupo de destino. Quando o Auto Scaling Group (ASG) for criado e configurado para utilizar esse grupo de destino, as instâncias EC2 gerenciadas pelo ASG serão registradas automaticamente. 
+
+10. Volte para a página de criação do ALB e, em "**Listeners e roteamento**", selecione o grupo de destino criado anteriormente.
+
+11. Clique em "**Criar load balancer**".
