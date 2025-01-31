@@ -26,10 +26,12 @@ Esse projeto consiste na implementação de uma infraestrutura escalável para h
     - 5.2 [Configurações de Rede](#52-configurações-de-rede)
     - 5.3 [Configurações de Autenticação](#53-configurações-de-autenticação)
     - 5.4 [Configurações Adicionais](#54-configurações-adicionais)
-6. [Configuração do Application Load Balancer](#6-configuração-do-application-load-balancer)
+6. [Configuração do Application Load Balancer (ALB)](#6-configuração-do-application-load-balancer)
     - 6.1 [Configurações Gerais](#61-configurações-gerais)
     - 6.2 [Configurações de Rede](#62-configurações-de-rede)
-    
+7. [Configuração do Auto Scaling Group (ASG)](#7-configuração-do-auto-scaling-group-asg)
+    - 7.1 [Configurações Gerais](#71-configurações-gerais)
+    - 7.2 [Configuração do Modelo de Execução](#72-configuração-do-modelo-de-execução)
 
 ## 1. Pré-requisitos
 
@@ -378,3 +380,27 @@ O serviço de **Elastic Load Balancing** distribui automaticamente o tráfego en
 10. Volte para a página de criação do ALB e, em "**Listeners e roteamento**", selecione o grupo de destino criado anteriormente.
 
 11. Clique em "**Criar load balancer**".
+
+## 7. Configuração do Auto Scaling Group (ASG)
+
+O Auto Scaling Group (ASG) é um serviço que gerencia a escalabilidade e a disponibilidade das instâncias EC2. Ele utiliza um modelo de execução baseado em políticas, que ajustam automaticamente o número de instâncias em resposta a métricas de demanda, como a utilização de CPU ou tráfego. Isso assegura que a infraestrutura esteja dimensionada de forma otimizada, tanto para alta carga quanto para períodos de menor demanda.
+
+#### 7.1 Configurações Gerais
+
+1. Na barra de pesquisa do console AWS, procure por "**Grupos de Auto Scaling**".
+
+2. Dê um nome descritivo ao grupo de Auto Scaling, e, em seguida, em "**Modelo de execução**", clique e "**Criar um modelo de execução**".
+
+#### 7.2 Configuração do Modelo de Execução 
+
+1. Dê um nome e uma descrição ao modelo de execução.
+
+2. Em "**Imagens de aplicação e de sistema operacional**", selecione a AMI do **Amazon Linux 2023**.
+
+3. Em "**Tipo de instância**", selecione "**t2.micro**".
+
+4. Em "**Par de chaves**", crie um par de chaves ou selecione um par de chaves já existente para se conectar às instâncias EC2.
+
+5. Em "**Configurações de rede**", selecione "**Não incluir no modelo de execução**", e, em seguida, em "**Firewall**", selecione o **grupo de segurança das instâncias EC2**".
+
+6. Mantenha as demais opções padrão e clique em "**Criar modelo de execução**".
