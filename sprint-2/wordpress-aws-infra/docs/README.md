@@ -156,17 +156,17 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
 
 7. Selecione o grupo de segurança das instâncias EC2 novamente, clique em "**Ações**" e "**Editar regras de saída**".
 
-8. Em "**regras de saída**", clique em "**Adicionar regra**".
+8. Em "**regras de saída**", remova a regra padrão para evitar conflitos de roteamento, e, em seguida, clique em "**Adicionar regra**".
 
 9. Adicione uma regra para permitir tráfego para o **RDS**:
 
-    - Tipo: personalizado
+    - Tipo: MySQL/Aurora
     - Porta: 3306 
     - Tipo de destino: selecione o **grupo de segurança do RDS**
 
 10. Adicione uma regra para permitir tráfego para o **EFS**:
 
-    - Tipo: personalizado
+    - Tipo: NFS
     - Porta: 2049 
     - Tipo de destino: selecione o **grupo de segurança do EFS**
 
