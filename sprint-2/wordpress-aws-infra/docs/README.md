@@ -27,7 +27,8 @@ Esse projeto consiste na implementação de uma infraestrutura escalável para h
     - 5.3 [Configurações de Autenticação](#53-configurações-de-autenticação)
     - 5.4 [Configurações Adicionais](#54-configurações-adicionais)
 6. [Configuração do Application Load Balancer](#6-configuração-do-application-load-balancer)
-    - 6.1 []()
+    - 6.1 [Configurações Gerais](#61-configurações-gerais)
+    - 6.2 [Configurações de Rede](#62-configurações-de-rede)
     
 
 ## 1. Pré-requisitos
@@ -167,7 +168,7 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
 10. Adicione uma regra para permitir tráfego para o **EFS**:
 
     - Tipo: NFS
-    - Porta: 2049 
+´    - Porta: 2049 
     - Tipo de destino: selecione o **grupo de segurança do EFS**
 
 11. Adicione uma regra para o **HTTPS**:
