@@ -399,6 +399,83 @@ O Auto Scaling Group (ASG) é um serviço que gerencia a escalabilidade e a disp
 
 4. Em "**Par de chaves**", crie um par de chaves ou selecione um par de chaves já existente para se conectar às instâncias EC2.
 
-5. Em "**Configurações de rede**", selecione "**Não incluir no modelo de execução**", e, em seguida, em "**Firewall**", selecione o **grupo de segurança das instâncias EC2**".
+5. Em "**Configurações de rede**", selecione a **sub-rede privada** disponível, e, em seguida, em "**Firewall**", selecione o **grupo de segurança das instâncias EC2**".
 
-6. Mantenha as demais opções padrão e clique em "**Criar modelo de execução**".
+6. Mantenha as demais opções padrão e clique em "**Detalhes avançados**".
+
+7. Mantenha as demais opções padrão e vá até a última opção ("**Dados do usuário**").
+
+8. Criaremos um script de inicialização para ambas as instâncias EC2 que:
+
+    - Monta automaticamente o sistema de arquivos EFS 
+    - Conecta automaticamente à instância do banco de dados RDS 
+    - Faz a instalação do Docker e do Docker Compose e a configuração do WordPress conteinerizado
+
+---
+
+#### *Script de Inicialização*
+
+```bash
+#!/bin/bash
+
+# Monta o sistema de arquivos
+yum install -y amazon-efs-utils
+mkdir -p /mnt/efs
+mount -t efs -o tls <efs_id>:/ /mnt/efs 
+echo "<efs_id>:/ /mnt/efs efs _netdev,tls 0 0" >> /etc/fstab
+
+# Atualiza pacotes e instala o Docker
+yum update -y
+sudo yum install -y libxcrypt-compat
+sudo yum install docker -y
+sudo systemctl start docker
+sudo systemctl enable docker
+usermod -a -G docker $USER
+
+# Instala o docker compose
+curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+
+# Cria o arquivo docker compose
+cat << EOF > /home/ec2-user/docker-compose.yml
+version: '3'
+services:
+  wordpress:
+    image: wordpress:latest
+    ports:
+      - "80:80"
+    environment:
+      WORDPRESS_DB_HOST: <endpoint_do_rds>.us-east-1.rds.amazonaws.com
+      WORDPRESS_DB_USER: admin
+      WORDPRESS_DB_PASSWORD: <segredo_do_rds>
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - /mnt/efs/wp-content:/var/www/html/wp-content  
+    restart: always
+EOF
+
+# Inicializa o contêiner do WordPress
+sudo docker-compose -f /home/ec2-user/docker-compose.yml up -d
+```
+
+---
+
+#### 7.4 Criação do ASG
+
+1. Após configurado o **modelo de execução**, retorne à aba "**Criar grupo de Auto Scaling**".
+
+2. Em "**Modelo de execução**", selecione o modelo de execução criado anteriormente.
+
+3. Clique em "**Próximo**".
+
+4. Em "**Rede**", selecione a VPC criada para o projeto, e, em "**Zonas de disponibilidade e sub-redes**", selecione as todas **sub-redes privadas** disponíveis. 
+
+5. Em "**Distribuição da zona de disponibilidade**", selecione "**Melhor esforço equilibrado**".
+
+6. Clique em "**Próximo**".
+
+7. Em "**Balanceamento de carga**", selecione "**Anexar a um balanceador de carga existente**".
+
+8. Em "**Anexar a um balanceador de carga existente**", selecione "**Escolha entre seus grupos de destino de balanceador de carga**". Selecione o **grupo de destino** criado para o **ALB** anteriormente.
+
+9. Mantenha as demais opções padrão e clique em "**Pular para a revisão**".
