@@ -47,7 +47,7 @@ Antes de criarmos as instâncias EC2 que hospedarão as aplicações do WordPres
 > [!NOTE]
 > A AWS oferece duas opções para criação de VPC: manual e automática. Na criação manual,  você configura a VPC, sub-redes, roteadores, gateways e outras opções de rede de forma  personalizada. Já na opção automática, o **assistente de VPC** cria a VPC com sub-redes públicas e  privadas, já anexa um gateway de internet, configura as tabelas de rotas e inclui um gateway NAT, caso seja necessário. Utilizaremos a criação automática com o VPC wizard. 
 
-### 2.1 Configuração Gerais
+### 2.1 Configurações Gerais
  
 1. No console AWS, acesse o serviço VPC e clique em "**Criar VPC**".
 
@@ -86,7 +86,7 @@ Antes de criarmos as instâncias EC2 que hospedarão as aplicações do WordPres
 
     - Um grupo de segurança padrão
 
-    #### Preview do VPC Workflow
+#### Preview do VPC Workflow
 
 ![VPC Workflow](../imgs/vpc-workflow-ptbr.png)
 
@@ -310,7 +310,7 @@ Iremos configurar o Amazon RDS para garantir que ambas as aplicações do WordPr
 
 2. Em "**Nuvem privada virtual (VPC)**", selecione a VPC criada para o projeto.
 
-3. Em "**Grupo de sub-redes de banco de dados**", selecione a opção *""Criar novo grupo de sub-redes do banco de dados**".
+3. Em "**Grupo de sub-redes de banco de dados**", selecione a opção "**Criar novo grupo de sub-redes do banco de dados**".
 
 4. Em "**Acesso público**", selecione a opção "**Não**".
 
