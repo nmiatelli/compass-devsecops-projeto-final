@@ -115,33 +115,28 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
 
 1. Selecione o grupo de segurança do ALB, clique em "**Ações**" e "**Editar regras de entrada**".
 
-2. Em "**Regras de entrada**", clique em "**Adicionar regra**".
-
-3. Adicione uma regra para o **HTTP**:
+2. Clique em "**Adicionar regra**" e adicione uma regra para o **HTTP**:
 
     - Tipo: HTTP
     - Porta: 80
     - Tipo de origem: qualquer local-ipv4 (0.0.0.0/0)
 
-4. Clique em "**Salvar regras**".
+3. Clique em "**Salvar regras**".
 
-5. Selecione o grupo de segurança do ALB novamente, clique em "**Ações**" e "**Editar regras de saída**".
-
-6. Verifique as "**Regras de saída**":
-
-7. Como o ALB já encaminha o tráfego para as instâncias EC2 via **grupos de destino**, não é necessário configurar regras de saída
+5. Verifique as "**Regras de saída**":
+    
+    - Mantenha a regra que permite todo tráfego de saída
 
 #### 3.4 Grupo de Segurança das Instâncias EC2
 
 1. Selecione o grupo de segurança das instâncias EC2, clique em "**Ações**" e "**Editar regras de entrada**".
 
-2. Em "**Regras de entrada**", clique em "**Adicionar regra**".
-
-3. Adicione uma regra para o **HTTP**:
+2. Clique em "**Adicionar regra**" e adicione uma regra para o **HTTP**:
 
     - Tipo: HTTP
     - Porta: 80
-    - Tipo de origem: selecione o **grupo de segurança do ALB**
+    - Tipo de origem: personalizado
+    - Origem: selecione o **grupo de segurança do ALB**
 
 4. Adicione uma regra para o **SSH**:
 
@@ -153,7 +148,8 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
 
     - Tipo: NFS
     - Porta: 2049
-    - Tipo de origem: selecione o **grupo de segurança do EFS**
+    - Tipo de origem: personalizado
+    - Origem: selecione o **grupo de segurança do EFS**
 
 6. Clique em "**Salvar regras**".
 
@@ -165,13 +161,15 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
 
     - Tipo: MySQL/Aurora
     - Porta: 3306 
-    - Tipo de destino: selecione o **grupo de segurança do RDS**
+    - Tipo de destino: personalizado 
+    - Destino: selecione o **grupo de segurança do RDS**
 
 10. Adicione uma regra para permitir tráfego para o **EFS**:
 
     - Tipo: NFS
-´    - Porta: 2049 
-    - Tipo de destino: selecione o **grupo de segurança do EFS**
+    - Porta: 2049 
+    - Tipo de destino: personalizado
+    - Destino: selecione o **grupo de segurança do EFS**
 
 11. Adicione uma regra para o **HTTPS**:
 
@@ -196,8 +194,8 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
 4. Clique em "**Salvar regras**".
 
 5. Verifique as "**Regras de saída**":
-
-    - Como o EFS não inicia conexões, não é necessário configurar regras de saída
+    
+    - Mantenha a regra que permite todo tráfego de saída
 
 #### 3.6 Grupo de Segurança do Relational Database Service (RDS)
 
@@ -214,8 +212,8 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
 4. Clique em "**Salvar regras**".
 
 5. Verifique as "**Regras de saída**":
-
-    - Como o RDS não inicia conexões, não é necessário configurar regras de saída
+    
+    - Mantenha a regra que permite todo tráfego de saída
 
 ## 4. Configuração do Elastic File System (EFS)
 
