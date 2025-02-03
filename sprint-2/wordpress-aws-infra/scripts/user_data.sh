@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 # Monta o sistema de arquivos
 yum install -y amazon-efs-utils

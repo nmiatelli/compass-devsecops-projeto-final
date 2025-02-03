@@ -416,7 +416,7 @@ O Auto Scaling Group (ASG) é um serviço que gerencia a escalabilidade e a disp
 #### *Script de Inicialização*
 
 ```bash
-#!/bin/env bash
+#!/usr/bin/env bash
 
 # Monta o sistema de arquivos
 yum install -y amazon-efs-utils
