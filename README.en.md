@@ -47,7 +47,7 @@ Automated nginx service monitoring system using AWS infrastructure.
 
 ---
 
-### Sprint 2 - High-Availabilty WordPress AWS Hosting System (WIP)
+### Sprint 2 - High-Availabilty WordPress Hosting infrastructure on AWS 
 Infrastructure for WordPress deployment using Docker.
 
 - [Documentation in Portuguese](./sprint-2/wordpress-aws-infra/docs/README.md)  

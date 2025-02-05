@@ -1,7 +1,7 @@
 [![English](https://img.shields.io/badge/English-blue.svg)](README.en.md)
 [![Português](https://img.shields.io/badge/Português-green.svg)](README.md)
 
-# Sistema de Alta Disponibilidade de Hospedagem do WordPress
+# Infraestrutura de Alta Disponibilidade para Hospedagem do WordPress na AWS
 
 ## Sobre o Projeto
 
