@@ -23,8 +23,7 @@ Repositório dedicado aos projetos de estágio na Compass.UOL.
 │   │   │   ├── README.md
 │   │   │   └── README.en.md
 │   │   ├── imgs/
-│   │   ├── scripts/
-│   │   └── config/
+│   │   └── scripts/
 ├── README.en.md
 ├── README.md
 └── LICENSE
@@ -48,7 +47,7 @@ Sistema de monitoramento automatizado do nginx utilizando infraestrutura AWS.
 
 ---
 
-### Sprint 2 - Sistema de Alta Disponibilidade de Hospedagem do WordPress na AWS (WIP)
+### Sprint 2 - Sistema de Alta Disponibilidade de Hospedagem do WordPress na AWS 
 Infraestrutura para deploy do WordPress utilizando Docker.
 
 - [Documentação em Português](./sprint-2/wordpress-aws-infra/docs/README.md)  
@@ -56,7 +55,7 @@ Infraestrutura para deploy do WordPress utilizando Docker.
 
 ### Tecnologias Utilizadas  
 
-- **AWS**: EC2, RDS, EFS, ALB  
+- **AWS**: EC2, RDS, EFS, ELB  
 - **Docker** 
 - **MySQL**  
 - **Shell Script** 
