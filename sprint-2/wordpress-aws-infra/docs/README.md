@@ -32,6 +32,8 @@ Esse projeto consiste na implementação de uma infraestrutura escalável para h
 7. [Configuração do Auto Scaling Group](#7-configuração-do-auto-scaling-group)
     - 7.1 [Configurações Gerais](#71-configurações-gerais)
     - 7.2 [Configuração do Modelo de Execução](#72-configuração-do-modelo-de-execução)
+    - 7.3 [Criação do ASG](#73-criação-do-asg)
+8. [Testando a Implementação da Infraestrutura](#8-testando-a-implementação-da-infraestrutura)
 
 ## 1. Pré-requisitos
 
@@ -361,7 +363,7 @@ O serviço de **Elastic Load Balancing** distribui automaticamente o tráfego en
 
 4. Em "**Listeners e roteamento**", certifique-se de que tanto o protocolo do *listener* quanto o da *instância* é o protocolo **HTTP** (Porta **80**).
 
-5. Em ¨**Verificação de integridade**", mantenha padrão.
+5. Em ¨**Verificação de integridade**", mantenha o protocolo e a porta do ping padrão e alterer o caminho do ping para `/wp-admin/install.php`.
 
 6. Em "**Instâncias**", não adicionaremos instâncias manualmente, pois elas serão adicionadas dinamicamente mais tarde pelo Auto Scaling Group.
 
@@ -383,7 +385,7 @@ O Auto Scaling Group (ASG) é um serviço que gerencia a escalabilidade e a disp
 
 1. Dê um nome e uma descrição ao modelo de execução.
 
-2. Em "**Imagens de aplicação e de sistema operacional**", selecione a AMI do **Amazon Linux 2023**.
+2. Em "**Imagens de aplicação e de sistema operacional**", selecione a AMI do **Amazon Linux 2**.
 
 3. Em "**Tipo de instância**", selecione "**t2.micro**".
 
@@ -406,11 +408,47 @@ O Auto Scaling Group (ASG) é um serviço que gerencia a escalabilidade e a disp
 #### *Script de Inicialização*
 
 ```bash
+#!/usr/bin/env bash
+
+sudo yum update -y
+sudo yum upgrade -y
+sudo yum install -y amazon-efs-utils
+
+mkdir -p /mnt/efs
+sudo mount -t efs -o tls "${EFS_ID}":/ /mnt/efs
+
+sudo yum install docker -y
+sudo usermod -a -G docker ec2-user
+newgrp docker
+sudo systemctl enable docker.service
+sudo systemctl start docker.service
+
+sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+cat << EOF > /home/ec2-user/docker-compose.yml
+services:
+  wordpress:
+    image: wordpress:latest
+    ports:
+      - "80:80"
+    environment:
+      WORDPRESS_DB_HOST: "${RDS_ENDPOINT}"
+      WORDPRESS_DB_USER: "${DB_USER}"
+      WORDPRESS_DB_PASSWORD: "${DB_PASSWORD}"
+      WORDPRESS_DB_NAME: "${DB_NAME}"
+    volumes:
+      - /mnt/efs/wp-content:/var/www/html/wp-content
+    restart: always
+EOF
+
+cd /home/ec2-user 
+docker-compose up -d
 ```
 
 ---
 
-#### 7.4 Criação do ASG
+#### 7.3 Criação do ASG
 
 1. Após configurado o **modelo de execução**, retorne à aba "**Criar grupo de Auto Scaling**".
 
@@ -428,6 +466,24 @@ O Auto Scaling Group (ASG) é um serviço que gerencia a escalabilidade e a disp
 
 8. Em "**Anexar a um balanceador de carga existente**", selecione "**Escolher entre Classic Load Balancers**". Selecione o CLB criado anteriormente.
 
-9. Mantenha as demais opções padrão e clique em "**Pular para a revisão**".
+9. Clique em "**Próximo**". Em "**Configurar tamanho do grupo e ajuste de escala**", configure as opções de escalabilidade:
 
-10. Clique em "**Criar grupo de Auto Scaling**".
+    - Capacidade desejada: 2
+    - Capacidade mínima desejada: 1
+    - Capacidade máxima desejada: 2 
+
+10. Mantenha todas as demais opções padrão e clique em "**Pular para revisão**".
+
+11. Caso esteja tudo conforme configurado anteriormente, clique em "**Criar grupo de Auto Scaling**".
+
+## 8. Testando a Implementação da Infraestrutura
+
+1. Na painel **EC2**, na seção "**Load Balancers**", selecione o CLB criado anteriormente.
+
+2. Em "**Detalhes**", verifique o status. O status deve mostrar duas instâncias **em serviço**. 
+
+3. Abaixo, em "**Nome do DNS**", copie o nome do DNS associado ao CLB e, em um navegador, cole o nome na barra de pesquisa.
+
+4. Você deve ver a página de configuração inicial do WordPress.
+
+![WordPress Setup](../imgs/wp-login.png)
