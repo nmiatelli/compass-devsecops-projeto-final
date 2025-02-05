@@ -152,34 +152,41 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
     - Tipo de origem: personalizado
     - Origem: selecione o **grupo de segurança do EFS**
 
-4. Clique em "**Salvar regras**".
+4. Adicione uma regra para permitir tráfego do **RDS**:
 
-5. Selecione o grupo de segurança das instâncias EC2 novamente, clique em "**Ações**" e "**Editar regras de saída**".
+    - Tipo: MySQL/Aurora
+    - Porta: 3306 
+    - Tipo de origem: personalizado 
+    - Origem: selecione o **grupo de segurança do RDS**
 
-6. Em "**regras de saída**", remova a regra padrão para evitar conflitos de roteamento, e, em seguida, clique em "**Adicionar regra**".
+5. Clique em "**Salvar regras**".
 
-7. Adicione uma regra para permitir tráfego para o **RDS**:
+6. Selecione o grupo de segurança das instâncias EC2 novamente, clique em "**Ações**" e "**Editar regras de saída**".
+
+7. Em "**regras de saída**", remova a regra padrão para evitar conflitos de roteamento, e, em seguida, clique em "**Adicionar regra**".
+
+8. Adicione uma regra para permitir tráfego para o **RDS**:
 
     - Tipo: MySQL/Aurora
     - Porta: 3306 
     - Tipo de destino: personalizado 
     - Destino: selecione o **grupo de segurança do RDS**
 
-8. Adicione uma regra para permitir tráfego para o **EFS**:
+9. Adicione uma regra para permitir tráfego para o **EFS**:
 
     - Tipo: NFS
     - Porta: 2049 
     - Tipo de destino: personalizado
     - Destino: selecione o **grupo de segurança do EFS**
 
-9. Adicione uma regra para o **HTTPS**:
+10. Adicione uma regra para o **HTTPS**:
 
     - Tipo: HTTPS
     - Porta: 443 
     - Tipo de destino: personalizado 
-    - Destino: 0.0.0.0/0 (para atualizações de pacotes ou chamadas externas)
+    - Destino: selecione o **grupo de segurança do CLB**
 
-10. Clique em "**Salvar regras**".
+11. Clique em "**Salvar regras**".
 
 #### 3.5 Grupo de Segurança do Elastic File System (EFS)
 
@@ -486,4 +493,12 @@ docker-compose up -d
 
 4. Você deve ver a página de configuração inicial do WordPress.
 
-![WordPress Setup](../imgs/wp-login.png)
+![WordPress Setup](../imgs/wp-language-select.png)
+
+5. Após selecionar o idioma, você será redirecionado para a página de instalação do WordPress.
+
+![5-Minute WordPress installation Page](../imgs/wordpress-installation-page.png)
+
+6. Após a instalação, você será redirecionado à página de login. Digite o nome de usuário e a senha cadastrados durante a instalação. Caso as credenciais estejam corretas, você será autenticado e redirecionado para o painel do WordPress, onde você poderá configurar seu site, instalar temas e plugins, e gerenciar conteúdos.
+
+![Wordpress Dashboard](../imgs/wordpress-dashboard.png)
