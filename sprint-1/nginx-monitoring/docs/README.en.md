@@ -287,7 +287,7 @@ nginx_status_monitor.sh
 
 5. Then, check the corresponding log files. Example of the `nginx_online.log` file with active service logs:
 
-![Manual Online Log Entry](compass-devsecops-scholarship/sprint-2/nginx-monitoring/mgs/manual_online_log_entry.png)
+![Manual Online Log Entry](compass-devsecops-scholarship/sprint-1/nginx-monitoring/mgs/manual_online_log_entry.png)
 
 ## 7. Script Automation
 
