@@ -111,9 +111,9 @@ Criaremos um grupo de segurança para o balanceador de carga, as instâncias EC2
 
 Após criados os grupos de segurança, daremos sequência à configuração das regras de entrada e saída de cada um deles.
 
-#### 3.3 Grupo de Segurança do Application Load Balancer (ALB)
+#### 3.3 Grupo de Segurança do Classic Load Balancer (CLB)
 
-1. Selecione o grupo de segurança do ALB, clique em "**Ações**" e "**Editar regras de entrada**".
+1. Selecione o grupo de segurança do CLB, clique em "**Ações**" e "**Editar regras de entrada**".
 
 2. Clique em "**Adicionar regra**" e adicione uma regra para o **HTTP**:
 
@@ -123,9 +123,14 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
 
 3. Clique em "**Salvar regras**".
 
-5. Verifique as "**Regras de saída**":
-    
-    - Mantenha a regra que permite todo tráfego de saída
+4. Selecione o grupo de segurança do CLB novamente, clique em "**Ações**" e "**Editar regras de saída**".
+
+5. Clique em "**Adicionar regra**" e adicione uma regra para permitir tráfego para as **instâncias EC2**:
+
+    - Tipo: HTTP
+    - Porta: 80
+    - Tipo de destino: personalizado
+    - Destino: selecione o grupo de segurança das **instâncias EC2**
 
 #### 3.4 Grupo de Segurança das Instâncias EC2
 
@@ -136,52 +141,47 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
     - Tipo: HTTP
     - Porta: 80
     - Tipo de origem: personalizado
-    - Origem: selecione o **grupo de segurança do ALB**
+    - Origem: selecione o **grupo de segurança do CLB**
 
-4. Adicione uma regra para o **SSH**:
-
-    - Tipo: SSH
-    - Porta: 22
-    - Tipo de origem: seu endereço de IP (use "**Meu IP**" para adicionar automaticamente)
-
-5. Adicione uma regra para o **NFS**:
+3. Adicione uma regra para o **NFS**:
 
     - Tipo: NFS
     - Porta: 2049
     - Tipo de origem: personalizado
     - Origem: selecione o **grupo de segurança do EFS**
 
-6. Clique em "**Salvar regras**".
+4. Clique em "**Salvar regras**".
 
-7. Selecione o grupo de segurança das instâncias EC2 novamente, clique em "**Ações**" e "**Editar regras de saída**".
+5. Selecione o grupo de segurança das instâncias EC2 novamente, clique em "**Ações**" e "**Editar regras de saída**".
 
-8. Em "**regras de saída**", remova a regra padrão para evitar conflitos de roteamento, e, em seguida, clique em "**Adicionar regra**".
+6. Em "**regras de saída**", remova a regra padrão para evitar conflitos de roteamento, e, em seguida, clique em "**Adicionar regra**".
 
-9. Adicione uma regra para permitir tráfego para o **RDS**:
+7. Adicione uma regra para permitir tráfego para o **RDS**:
 
     - Tipo: MySQL/Aurora
     - Porta: 3306 
     - Tipo de destino: personalizado 
     - Destino: selecione o **grupo de segurança do RDS**
 
-10. Adicione uma regra para permitir tráfego para o **EFS**:
+8. Adicione uma regra para permitir tráfego para o **EFS**:
 
     - Tipo: NFS
     - Porta: 2049 
     - Tipo de destino: personalizado
     - Destino: selecione o **grupo de segurança do EFS**
 
-11. Adicione uma regra para o **HTTPS**:
+9. Adicione uma regra para o **HTTPS**:
 
     - Tipo: HTTPS
     - Porta: 443 
-    - Tipo de destino: 0.0.0.0/0 (para atualizações de pacotes ou chamadas externas)
+    - Tipo de destino: personalizado 
+    - Destino: 0.0.0.0/0 (para atualizações de pacotes ou chamadas externas)
 
-12. Clique em "**Salvar regras**".
+10. Clique em "**Salvar regras**".
 
 #### 3.5 Grupo de Segurança do Elastic File System (EFS)
 
-1. Selecione o grupo de segurança do EFS, clique em "**Ações**" e "**Editar regras de saída**".
+1. Selecione o grupo de segurança do EFS, clique em "**Ações**" e "**Editar regras de entrada**".
 
 2. Em "**Regras de entrada**", clique em "**Adicionar regra**".
 
@@ -189,7 +189,8 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
 
     - Tipo: NFS
     - Porta: 2049
-    - Tipo de origem: selecione o **grupo de segurança das instâncias EC2**
+    - Tipo de origem:  personalizado
+    - Origem: selecione o **grupo de segurança das instâncias EC2**
 
 4. Clique em "**Salvar regras**".
 
@@ -199,7 +200,7 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
 
 #### 3.6 Grupo de Segurança do Relational Database Service (RDS)
 
-1. Selecione o grupo de segurança do RDS, clique em "**Ações**" e "**Editar regras de saída**".
+1. Selecione o grupo de segurança do RDS, clique em "**Ações**" e "**Editar regras de entrada**".
 
 2. Em "**Regras de entrada**", clique em "**Adicionar regra**".
 
@@ -207,7 +208,8 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
 
     - Tipo: MySQL/Aurora
     - Porta: 3306
-    - Tipo de origem: selecione o **grupo de segurança das instâncias EC2**
+    - Tipo de origem: personalizado
+    - Origem: selecione o **grupo de segurança das instâncias EC2**
 
 4. Clique em "**Salvar regras**".
 
@@ -298,7 +300,7 @@ Iremos configurar o Amazon RDS para garantir que ambas as aplicações do WordPr
 
 8. Em "**Gerenciamento de credenciais**", selecione "**Configurações de credenciais**". Nessa opção, o RDS gera uma senha e a gerencia durante todo o ciclo de vida usando o **AWS Secrets Manager**.
 
-9. Em "**COnfiguração da instância**", selecione "**db.t3.micro**".
+9. Em "**Configuração da instância**", selecione "**db.t3.micro**".
 
 10. Em "**Armazenamento**", mantenha as opções padrão.
 
@@ -333,9 +335,9 @@ Iremos configurar o Amazon RDS para garantir que ambas as aplicações do WordPr
 
 4. Se tudo estiver conforme configurado nas etapas anteriores, clique em "**Criar banco de dados**".
 
-## 6. Configuração do Application Load Balancer
+## 6. Configuração do Classic Load Balancer (CLB)
 
-O serviço de **Elastic Load Balancing** distribui automaticamente o tráfego entre vários alvos, como instâncias EC2, contêineres e IPs, em múltiplas zonas de disponibilidade. Ele monitora a saúde dos alvos e encaminha requisições apenas para os que estão operacionais, ajustando sua capacidade conforme a demanda. A AWS oferece diferentes tipos de balanceadores de carga. Para esse projeto, utilizaremos o **Application Load Balancer (ALB)**, que opera na camada 7 (Aplicação) do modelo OSI, sendo o ideal para distribuir tráfego HTTP para as instâncias EC2 que hospedam o WordPress.
+O serviço de **Elastic Load Balancing** distribui automaticamente o tráfego entre vários alvos, como instâncias EC2, contêineres e IPs, em múltiplas zonas de disponibilidade. Ele monitora a saúde dos alvos e encaminha requisições apenas para os que estão operacionais, ajustando sua capacidade conforme a demanda. A AWS oferece diferentes tipos de balanceadores de carga. Para esse projeto, utilizaremos o **Classic Load Balancer**.
 
 #### 6.1 Configurações Gerais
 
@@ -343,41 +345,29 @@ O serviço de **Elastic Load Balancing** distribui automaticamente o tráfego en
 
 2. Clique em "**Criar load balancer**".
 
-3. Como **tipo de load balancer**, selecione "**Application Load Balancer**" e clique em "**Criar**".
+3. Como **tipo de load balancer**, selecione "**Classic Load Balancer**" e clique em "**Criar**".
 
 4. Dê um nome descritivo ao load balancer.
 
 5. Em "**Esquema**", selecione "**Voltado para a internet**".
 
-6. Em "**Tipo de endereço IP do balanceador de carga**", mantenha padrão (**IPv4**).
-
 #### 6.2 Configurações de Rede
 
 1. Em "**Mapeamento de rede**", selecione a VPC criada para o projeto.
 
-2. Em "**Mapeamentos**", selecione as duas zonas de disponibilidade (**us-east-1a** e **us-east-1b**) e selecione uma **sub-rede pública** em cada uma delas.
+2. Em "**Mapeamentos**", selecione as duas zonas de disponibilidade (**us-east-1a** e **us-east-1b**) e selecione a **sub-rede pública** disponível em cada uma delas.
 
-3. Em "**Grupos de segurança**", selecione o **grupo de segurança do ALB**.
+3. Em "**Grupos de segurança**", selecione o **grupo de segurança do CLB**.
 
-4. Em "**Listeners e roteamento**", certifique-se de que o protocolo **HTTP** está selecionado (Porta **80**).
+4. Em "**Listeners e roteamento**", certifique-se de que tanto o protocolo do *listener* quanto o da *instância* é o protocolo **HTTP** (Porta **80**).
 
-5. Em "**Ação padrão**", abaixo da barra de seleção do grupo de destino, clique em "**Criar grupo de destino**".
+5. Em ¨**Verificação de integridade**", mantenha padrão.
 
-6. Crie um grupo de destino para as **instâncias EC2**:
+6. Em "**Instâncias**", não adicionaremos instâncias manualmente, pois elas serão adicionadas dinamicamente mais tarde pelo Auto Scaling Group.
 
-    - Tipo de destino: **Instâncias**
-    - Nome do grupo de destino: dê um nome descritivo
-    - Protocolo e Porta: **HTTP:80**
+7. Em "**Atributos**", certifique-se de que a opção "**Habilitar balanceamento de carga entre zonas**" está selecionada e mantenha as demais padrão.
 
-7. Em "**VPC**", certifique-se de que a VPC criada para o projeto está selecionada. 
-
-8. Mantenha as demais opções padrão e clique em "**Próximo**".
-
-9. Em "**Registrar destinos**", pularemos essa etapa de registro das instâncias EC2 manualmente no grupo de destino. Quando o Auto Scaling Group (ASG) for criado e configurado para utilizar esse grupo de destino, as instâncias EC2 gerenciadas pelo ASG serão registradas automaticamente. 
-
-10. Volte para a página de criação do ALB e, em "**Listeners e roteamento**", selecione o grupo de destino criado anteriormente.
-
-11. Clique em "**Criar load balancer**".
+8. Clique em "**Criar load balancer**".
 
 ## 7. Configuração do Auto Scaling Group (ASG)
 
@@ -399,7 +389,7 @@ O Auto Scaling Group (ASG) é um serviço que gerencia a escalabilidade e a disp
 
 4. Em "**Par de chaves**", crie um par de chaves ou selecione um par de chaves já existente para se conectar às instâncias EC2.
 
-5. Em "**Configurações de rede**", selecione a **sub-rede privada** disponível, e, em seguida, em "**Firewall**", selecione o **grupo de segurança das instâncias EC2**".
+5. Em "**Configurações de rede**", selecione "**Não incluir no modelo de execução**", e, em seguida, em "**Firewall**", selecione o **grupo de segurança das instâncias EC2**".
 
 6. Mantenha as demais opções padrão e clique em "**Detalhes avançados**".
 
@@ -416,46 +406,6 @@ O Auto Scaling Group (ASG) é um serviço que gerencia a escalabilidade e a disp
 #### *Script de Inicialização*
 
 ```bash
-#!/usr/bin/env bash
-
-# Monta o sistema de arquivos
-yum install -y amazon-efs-utils
-mkdir -p /mnt/efs
-mount -t efs -o tls <efs_id>:/ /mnt/efs 
-echo "<efs_id>:/ /mnt/efs efs _netdev,tls 0 0" >> /etc/fstab
-
-# Atualiza pacotes e instala o Docker
-yum update -y
-sudo yum install -y libxcrypt-compat
-sudo yum install docker -y
-sudo systemctl start docker
-sudo systemctl enable docker
-usermod -a -G docker $USER
-
-# Instala o docker compose
-curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
-
-# Cria o arquivo docker compose
-cat << EOF > /home/ec2-user/docker-compose.yml
-version: '3'
-services:
-  wordpress:
-    image: wordpress:latest
-    ports:
-      - "80:80"
-    environment:
-      WORDPRESS_DB_HOST: <endpoint_do_rds>.us-east-1.rds.amazonaws.com
-      WORDPRESS_DB_USER: admin
-      WORDPRESS_DB_PASSWORD: <segredo_do_rds>
-      WORDPRESS_DB_NAME: wordpress
-    volumes:
-      - /mnt/efs/wp-content:/var/www/html/wp-content  
-    restart: always
-EOF
-
-# Inicializa o contêiner do WordPress
-sudo docker-compose -f /home/ec2-user/docker-compose.yml up -d
 ```
 
 ---
@@ -476,6 +426,8 @@ sudo docker-compose -f /home/ec2-user/docker-compose.yml up -d
 
 7. Em "**Balanceamento de carga**", selecione "**Anexar a um balanceador de carga existente**".
 
-8. Em "**Anexar a um balanceador de carga existente**", selecione "**Escolha entre seus grupos de destino de balanceador de carga**". Selecione o **grupo de destino** criado para o **ALB** anteriormente.
+8. Em "**Anexar a um balanceador de carga existente**", selecione "**Escolher entre Classic Load Balancers**". Selecione o CLB criado anteriormente.
 
 9. Mantenha as demais opções padrão e clique em "**Pular para a revisão**".
+
+10. Clique em "**Criar grupo de Auto Scaling**".
