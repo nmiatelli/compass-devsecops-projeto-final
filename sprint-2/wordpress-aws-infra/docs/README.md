@@ -5,7 +5,7 @@
 
 ## Sobre o Projeto
 
-Esse projeto consiste na implementação de uma infraestrutura escalável para hospedar aplicações WordPress na AWS. A solução envolve a instalação e configuração do Docker em instâncias EC2, utilizando um script de inicialização para automatizar o processo. Além disso, o projeto inclui a configuração de um banco de dados MySQL gerenciado pelo Amazon RDS, a integração do Amazon EFS para o compartilhamento de arquivos entre as instâncias EC2 que hospedam o WordPress e a implementação de um Application Load Balancer para distribuir o tráfego entre instâncias em múltiplas Zonas de Disponibilidade, garantindo alta disponibilidade. As instâncias EC2 são gerenciadas por um Auto Scaling Group, que ajusta automaticamente a capacidade com base na demanda, assegurando que a aplicação escale de forma eficiente e permaneça disponível mesmo em picos de tráfego.
+Esse projeto consiste na implementação de uma infraestrutura escalável para hospedar aplicações WordPress na AWS. A solução envolve a instalação e configuração do Docker em instâncias EC2, utilizando um script de inicialização para automatizar o processo. Além disso, o projeto inclui a configuração de um banco de dados MySQL gerenciado pelo Amazon RDS, a integração do Amazon EFS para o compartilhamento de arquivos entre as instâncias EC2 que hospedam o WordPress e a implementação de um Classic Load Balancer para distribuir o tráfego entre instâncias em múltiplas Zonas de Disponibilidade, garantindo alta disponibilidade. As instâncias EC2 são gerenciadas por um Auto Scaling Group, que ajusta automaticamente a capacidade com base na demanda, assegurando que a aplicação escale de forma eficiente e permaneça disponível mesmo em picos de tráfego.
 
 ### Índice
 
@@ -21,15 +21,15 @@ Esse projeto consiste na implementação de uma infraestrutura escalável para h
     - 4.2 [Configurações de Rede](#42-configurações-de-rede)
     - 4.3 [Política do Sistema de Arquivos](#43-política-do-sistema-de-arquivos)
     - 4.4 [Revisão das Configurações](#44-revisão-das-configurações)
-5. [Configurações do Relational Database Service (RDS)](#5-configuração-do-relational-database-service-rds)
+5. [Configurações do Relational Database Service](#5-configuração-do-relational-database-service)
     - 5.1 [Configurações Gerais](#51-configurações-gerais)
     - 5.2 [Configurações de Rede](#52-configurações-de-rede)
     - 5.3 [Configurações de Autenticação](#53-configurações-de-autenticação)
     - 5.4 [Configurações Adicionais](#54-configurações-adicionais)
-6. [Configuração do Application Load Balancer (ALB)](#6-configuração-do-application-load-balancer)
+6. [Configuração do Classic Load Balancer](#6-configuração-do-classic-load-balancer)
     - 6.1 [Configurações Gerais](#61-configurações-gerais)
     - 6.2 [Configurações de Rede](#62-configurações-de-rede)
-7. [Configuração do Auto Scaling Group (ASG)](#7-configuração-do-auto-scaling-group-asg)
+7. [Configuração do Auto Scaling Group](#7-configuração-do-auto-scaling-group)
     - 7.1 [Configurações Gerais](#71-configurações-gerais)
     - 7.2 [Configuração do Modelo de Execução](#72-configuração-do-modelo-de-execução)
 
@@ -38,7 +38,7 @@ Esse projeto consiste na implementação de uma infraestrutura escalável para h
 - Uma conta ativa na AWS
 - Conhecimento básico do console AWS
 - Conhecimento básico do terminal Linux
-- Familiaridade com conceitos de conteinerização
+- Familiaridade com conteinerização
 
 ## 2. Configuração do Ambiente Virtual 
 
@@ -278,7 +278,7 @@ Mantenha todas as opções como padrão e clique em "**Próximo**".
 
 Nessa etapa, verifique todas as configurações. Se tudo estiver conforme configurado nas etapas anteriores, clique em "**Criar**".
 
-## 5. Configuração do Relational Database Service (RDS)
+## 5. Configuração do Relational Database Service
 
 Iremos configurar o Amazon RDS para garantir que ambas as aplicações do WordPress tenham uma base de dados persistente e escalável, com alta disponibilidade entre diferentes zonas de disponibilidade. O RDS é um serviço gerenciado de banco de dados que facilita a configuração, operação e escalabilidade de vários tipos de bancos de dados, como MySQL, PostgreSQL, MariaDB, Oracle e SQL Server, com backups automáticos, failover e segurança integrados. Para esse projeto, iremos utilizar uma instância do **MySQL** no RDS.
 
@@ -335,7 +335,7 @@ Iremos configurar o Amazon RDS para garantir que ambas as aplicações do WordPr
 
 4. Se tudo estiver conforme configurado nas etapas anteriores, clique em "**Criar banco de dados**".
 
-## 6. Configuração do Classic Load Balancer (CLB)
+## 6. Configuração do Classic Load Balancer
 
 O serviço de **Elastic Load Balancing** distribui automaticamente o tráfego entre vários alvos, como instâncias EC2, contêineres e IPs, em múltiplas zonas de disponibilidade. Ele monitora a saúde dos alvos e encaminha requisições apenas para os que estão operacionais, ajustando sua capacidade conforme a demanda. A AWS oferece diferentes tipos de balanceadores de carga. Para esse projeto, utilizaremos o **Classic Load Balancer**.
 
@@ -369,7 +369,7 @@ O serviço de **Elastic Load Balancing** distribui automaticamente o tráfego en
 
 8. Clique em "**Criar load balancer**".
 
-## 7. Configuração do Auto Scaling Group (ASG)
+## 7. Configuração do Auto Scaling Group
 
 O Auto Scaling Group (ASG) é um serviço que gerencia a escalabilidade e a disponibilidade das instâncias EC2. Ele utiliza um modelo de execução baseado em políticas, que ajustam automaticamente o número de instâncias em resposta a métricas de demanda, como a utilização de CPU ou tráfego. Isso assegura que a infraestrutura esteja dimensionada de forma otimizada, tanto para alta carga quanto para períodos de menor demanda.
 

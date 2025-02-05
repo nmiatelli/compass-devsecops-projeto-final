@@ -23,8 +23,7 @@ Repository dedicated to internship projects at Compass.UOL.
 │   │   │   ├── README.md
 │   │   │   └── README.en.md
 │   │   ├── imgs/
-│   │   ├── scripts/
-│   │   └── config/
+│   │   └── scripts/
 ├── README.en.md
 ├── README.md
 └── LICENSE
@@ -56,7 +55,7 @@ Infrastructure for WordPress deployment using Docker.
 
 ### Technologies Used  
 
-- **AWS**: EC2, RDS, EFS, ALB  
+- **AWS**: EC2, RDS, EFS, ELB  
 - **Docker**  
 - **MySQL**  
 - **EFS**  
