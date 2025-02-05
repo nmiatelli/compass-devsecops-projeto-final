@@ -16,7 +16,7 @@ Esse projeto consiste na implementação de uma infraestrutura escalável para h
 3. [Configuração dos Grupos de Segurança](#3-configuração-dos-grupos-de-segurança)
     - 3.1 [Criação dos Grupos de Segurança](#31-criação-dos-grupos-de-segurança)
     - 3.2 [Configuração das Regras de Entrada e Saída](#32-configuração-das-regras-de-entrada-e-saída)
-4. [Configuração do Elastic File System (EFS)](#4-configuração-do-elastic-file-system-efs)
+4. [Configuração do Elastic File System](#4-configuração-do-elastic-file-system)
     - 4.1 [Configurações Gerais](#41-configurações-gerais)
     - 4.2 [Configurações de Rede](#42-configurações-de-rede)
     - 4.3 [Política do Sistema de Arquivos](#43-política-do-sistema-de-arquivos)
@@ -121,18 +121,35 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
 
     - Tipo: HTTP
     - Porta: 80
-    - Tipo de origem: qualquer local-ipv4 (0.0.0.0/0)
+    - Tipo de origem: personalizado
+    - Origem: qualquer local-ipv4 (0.0.0.0/0)
 
-3. Clique em "**Salvar regras**".
+3. Adicione uma regra para o **HTTPS**:
 
-4. Selecione o grupo de segurança do CLB novamente, clique em "**Ações**" e "**Editar regras de saída**".
+    - Tipo: HTTPS
+    - Porta: 443
+    - Tipo de origem: personalizado
+    - Origem: qualquer local-ipv4 (0.0.0.0/0)
 
-5. Clique em "**Adicionar regra**" e adicione uma regra para permitir tráfego para as **instâncias EC2**:
+4. Clique em "**Salvar regras**".
+
+5. Selecione o grupo de segurança do CLB novamente, clique em "**Ações**" e "**Editar regras de saída**".
+
+6. Clique em "**Adicionar regra**" e adicione uma regra para permitir tráfego **HTTP** para as **instâncias EC2**:
 
     - Tipo: HTTP
     - Porta: 80
     - Tipo de destino: personalizado
     - Destino: selecione o grupo de segurança das **instâncias EC2**
+
+7. adicione uma regra para permitir tráfego **HTTPS** para as **instâncias EC2**:
+
+    - Tipo: HTTPS
+    - Porta: 443
+    - Tipo de destino: personalizado
+    - Destino: selecione o grupo de segurança das **instâncias EC2**
+
+8. Clique em "**Salvar regras**".
 
 #### 3.4 Grupo de Segurança das Instâncias EC2
 
@@ -145,50 +162,57 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
     - Tipo de origem: personalizado
     - Origem: selecione o **grupo de segurança do CLB**
 
-3. Adicione uma regra para o **NFS**:
+3. Adicione uma regra para o **HTTPS**:
+
+    - Tipo: HTTPS
+    - Porta: 443
+    - Tipo de origem: personalizado
+    - Origem: selecione o **grupo de segurança do CLB**
+
+4. Adicione uma regra para o **NFS**:
 
     - Tipo: NFS
     - Porta: 2049
     - Tipo de origem: personalizado
     - Origem: selecione o **grupo de segurança do EFS**
 
-4. Adicione uma regra para permitir tráfego do **RDS**:
+5. Adicione uma regra para permitir tráfego do **RDS**:
 
     - Tipo: MySQL/Aurora
     - Porta: 3306 
     - Tipo de origem: personalizado 
     - Origem: selecione o **grupo de segurança do RDS**
 
-5. Clique em "**Salvar regras**".
+6. Clique em "**Salvar regras**".
 
-6. Selecione o grupo de segurança das instâncias EC2 novamente, clique em "**Ações**" e "**Editar regras de saída**".
+7. Selecione o grupo de segurança das instâncias EC2 novamente, clique em "**Ações**" e "**Editar regras de saída**".
 
-7. Em "**regras de saída**", remova a regra padrão para evitar conflitos de roteamento, e, em seguida, clique em "**Adicionar regra**".
+8. Em "**regras de saída**", remova a regra padrão para evitar conflitos de roteamento, e, em seguida, clique em "**Adicionar regra**".
 
-8. Adicione uma regra para permitir tráfego para o **RDS**:
+9. Adicione uma regra para permitir tráfego para o **RDS**:
 
     - Tipo: MySQL/Aurora
     - Porta: 3306 
     - Tipo de destino: personalizado 
     - Destino: selecione o **grupo de segurança do RDS**
 
-9. Adicione uma regra para permitir tráfego para o **EFS**:
+10. Adicione uma regra para permitir tráfego para o **EFS**:
 
     - Tipo: NFS
     - Porta: 2049 
     - Tipo de destino: personalizado
     - Destino: selecione o **grupo de segurança do EFS**
 
-10. Adicione uma regra para o **HTTPS**:
+11. Adicione uma regra para o **HTTPS**:
 
     - Tipo: HTTPS
     - Porta: 443 
     - Tipo de destino: personalizado 
     - Destino: selecione o **grupo de segurança do CLB**
 
-11. Clique em "**Salvar regras**".
+12. Clique em "**Salvar regras**".
 
-#### 3.5 Grupo de Segurança do Elastic File System (EFS)
+#### 3.5 Grupo de Segurança do Elastic File System 
 
 1. Selecione o grupo de segurança do EFS, clique em "**Ações**" e "**Editar regras de entrada**".
 
@@ -226,7 +250,7 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
     
     - Mantenha a regra que permite todo tráfego de saída
 
-## 4. Configuração do Elastic File System (EFS)
+## 4. Configuração do Elastic File System 
 
 Iremos configurar um sistema de arquivos elástico para que as instâncias que hospedam o WordPress possam compartilhar arquivos mesmo em diferentes zonas de disponibilidade.
 
