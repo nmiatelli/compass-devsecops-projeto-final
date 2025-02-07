@@ -23,8 +23,8 @@ Repositório dedicado aos projetos de estágio na Compass.UOL.
 │   │   │   ├── README.md
 │   │   │   └── README.en.md
 │   │   ├── imgs/
-│   │   ├── scripts/
-│   │   └── config/
+│   │   └── scripts/
+│   │       └── user_data.sh
 ├── README.en.md
 ├── README.md
 └── LICENSE
