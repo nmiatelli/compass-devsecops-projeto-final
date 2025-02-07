@@ -5,7 +5,7 @@
 
 ## Sobre o Projeto
 
-Esse projeto consiste na implementação de uma infraestrutura escalável para hospedar aplicações WordPress na AWS. A solução envolve a instalação e configuração do Docker em instâncias EC2, utilizando um script de inicialização para automatizar o processo. Além disso, o projeto inclui a configuração de um banco de dados MySQL gerenciado pelo Amazon RDS, a integração do Amazon EFS para o compartilhamento de arquivos entre as instâncias EC2 que hospedam o WordPress e a implementação de um Classic Load Balancer para distribuir o tráfego entre instâncias em múltiplas Zonas de Disponibilidade, garantindo alta disponibilidade. As instâncias EC2 são gerenciadas por um Auto Scaling Group, que ajusta automaticamente a capacidade com base na demanda, assegurando que a aplicação escale de forma eficiente e permaneça disponível mesmo em picos de tráfego.
+Esse projeto consiste na implementação de uma infraestrutura escalável para hospedar aplicações WordPress na AWS. A solução envolve a instalação e configuração do Docker em instâncias do EC2, utilizando um script de inicialização para automatizar o processo. Além disso, o projeto inclui a configuração de um banco de dados MySQL gerenciado pelo Amazon RDS, a integração do Amazon EFS para o compartilhamento de arquivos entre as instâncias do EC2 que hospedam o WordPress e a implementação de um Application Load Balancer para distribuir o tráfego entre instâncias em múltiplas Zonas de Disponibilidade, garantindo alta disponibilidade. As instâncias do EC2 são gerenciadas por um Auto Scaling Group, que ajusta automaticamente a capacidade com base na demanda, assegurando que a aplicação escale de forma eficiente e permaneça disponível mesmo em picos de tráfego.
 
 ### Índice
 
@@ -26,7 +26,7 @@ Esse projeto consiste na implementação de uma infraestrutura escalável para h
     - 5.2 [Configurações de Rede](#52-configurações-de-rede)
     - 5.3 [Configurações de Autenticação](#53-configurações-de-autenticação)
     - 5.4 [Configurações Adicionais](#54-configurações-adicionais)
-6. [Configuração do Classic Load Balancer](#6-configuração-do-classic-load-balancer)
+6. [Configuração do Application Load Balancer](#6-configuração-do-application-load-balancer)
     - 6.1 [Configurações Gerais](#61-configurações-gerais)
     - 6.2 [Configurações de Rede](#62-configurações-de-rede)
 7. [Configuração do Auto Scaling Group](#7-configuração-do-auto-scaling-group)
@@ -44,7 +44,7 @@ Esse projeto consiste na implementação de uma infraestrutura escalável para h
 
 ## 2. Configuração do Ambiente Virtual 
 
-Antes de criarmos as instâncias EC2 que hospedarão as aplicações do WordPress e configurar os demais serviços de segurança, armazenamento e balanceamento de carga, precisamos configurar o ambiente de rede onde o projeto será executado. Criaremos uma VPC (Virtual Private Cloud) dedicada ao projeto.
+Antes de criarmos as instâncias do EC2 que hospedarão as aplicações do WordPress e configurar os demais serviços de segurança, armazenamento e balanceamento de carga, precisamos configurar o ambiente de rede onde o projeto será executado. Criaremos uma VPC (Virtual Private Cloud) dedicada ao projeto.
 
 > [!NOTE]
 > A AWS oferece duas opções para criação de VPC: manual e automática. Na criação manual,  você configura a VPC, sub-redes, roteadores, gateways e outras opções de rede de forma  personalizada. Já na opção automática, o **assistente de VPC** cria a VPC com sub-redes públicas e  privadas, já anexa um gateway de internet, configura as tabelas de rotas e inclui um gateway NAT, caso seja necessário. Utilizaremos a criação automática com o VPC wizard. 
@@ -103,7 +103,7 @@ Como cada recurso exige regras de tráfego distintas, criaremos grupos de segura
 
 No **Painel da VPC**, navegue até a seção "**Segurança**" e clique em "**Grupos de segurança**". Após isso, clique em "**Criar grupo de segurança**".
 
-Criaremos um grupo de segurança para o balanceador de carga, as instâncias EC2, o EFS e o RDS. Para cada grupo de segurança, preencheremos:
+Criaremos um grupo de segurança para o balanceador de carga, as instâncias do EC2, o EFS e o RDS. Para cada grupo de segurança, preencheremos:
 
 - Nome do grupo de segurança 
 - Descrição
@@ -113,9 +113,9 @@ Criaremos um grupo de segurança para o balanceador de carga, as instâncias EC2
 
 Após criados os grupos de segurança, daremos sequência à configuração das regras de entrada e saída de cada um deles.
 
-#### 3.3 Grupo de Segurança do Classic Load Balancer (CLB)
+#### 3.3 Grupo de Segurança do Application Load Balancer (ALB)
 
-1. Selecione o grupo de segurança do CLB, clique em "**Ações**" e "**Editar regras de entrada**".
+1. Selecione o grupo de segurança do ALB, clique em "**Ações**" e "**Editar regras de entrada**".
 
 2. Clique em "**Adicionar regra**" e adicione uma regra para o **HTTP**:
 
@@ -125,25 +125,25 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
 
 3. Clique em "**Salvar regras**".
 
-4. Selecione o grupo de segurança do CLB novamente, clique em "**Ações**" e "**Editar regras de saída**".
+4. Selecione o grupo de segurança do ALB novamente, clique em "**Ações**" e "**Editar regras de saída**".
 
-5. Clique em "**Adicionar regra**" e adicione uma regra para permitir tráfego para as **instâncias EC2**:
+5. Clique em "**Adicionar regra**" e adicione uma regra para permitir tráfego para as **instâncias do EC2**:
 
     - Tipo: HTTP
     - Porta: 80
     - Tipo de destino: personalizado
-    - Destino: selecione o grupo de segurança das **instâncias EC2**
+    - Destino: selecione o grupo de segurança das **instâncias do EC2**
 
-#### 3.4 Grupo de Segurança das Instâncias EC2
+#### 3.4 Grupo de Segurança das instâncias do EC2
 
-1. Selecione o grupo de segurança das instâncias EC2, clique em "**Ações**" e "**Editar regras de entrada**".
+1. Selecione o grupo de segurança das instâncias do EC2, clique em "**Ações**" e "**Editar regras de entrada**".
 
 2. Clique em "**Adicionar regra**" e adicione uma regra para o **HTTP**:
 
     - Tipo: HTTP
     - Porta: 80
     - Tipo de origem: personalizado
-    - Origem: selecione o **grupo de segurança do CLB**
+    - Origem: selecione o **grupo de segurança do ALB**
 
 3. Adicione uma regra para o **NFS**:
 
@@ -161,7 +161,7 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
 
 5. Clique em "**Salvar regras**".
 
-6. Selecione o grupo de segurança das instâncias EC2 novamente, clique em "**Ações**" e "**Editar regras de saída**".
+6. Selecione o grupo de segurança das instâncias do EC2 novamente, clique em "**Ações**" e "**Editar regras de saída**".
 
 7. Em "**regras de saída**", remova a regra padrão para evitar conflitos de roteamento, e, em seguida, clique em "**Adicionar regra**".
 
@@ -184,7 +184,7 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
     - Tipo: HTTPS
     - Porta: 443 
     - Tipo de destino: personalizado 
-    - Destino: selecione o **grupo de segurança do CLB**
+    - Destino: selecione o **grupo de segurança do ALB**
 
 11. Clique em "**Salvar regras**".
 
@@ -199,7 +199,7 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
     - Tipo: NFS
     - Porta: 2049
     - Tipo de origem:  personalizado
-    - Origem: selecione o **grupo de segurança das instâncias EC2**
+    - Origem: selecione o **grupo de segurança das instâncias do EC2**
 
 4. Clique em "**Salvar regras**".
 
@@ -218,7 +218,7 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
     - Tipo: MySQL/Aurora
     - Porta: 3306
     - Tipo de origem: personalizado
-    - Origem: selecione o **grupo de segurança das instâncias EC2**
+    - Origem: selecione o **grupo de segurança das instâncias do EC2**
 
 4. Clique em "**Salvar regras**".
 
@@ -315,7 +315,7 @@ Iremos configurar o Amazon RDS para garantir que ambas as aplicações do WordPr
 
 #### 5.2 Configurações de Rede
 
-1. Em "**Conectividade**", selecione "**Não se conectar a um recurso de computação do EC2**". Iremos configurar a conexão às instâncias EC2 manualmente mais tarde.
+1. Em "**Conectividade**", selecione "**Não se conectar a um recurso de computação do EC2**". Iremos configurar a conexão às instâncias do EC2 manualmente mais tarde.
 
 2. Em "**Nuvem privada virtual (VPC)**", selecione a VPC criada para o projeto.
 
@@ -344,9 +344,9 @@ Iremos configurar o Amazon RDS para garantir que ambas as aplicações do WordPr
 
 4. Se tudo estiver conforme configurado nas etapas anteriores, clique em "**Criar banco de dados**".
 
-## 6. Configuração do Classic Load Balancer
+## 6. Configuração do Application Load Balancer
 
-O serviço de **Elastic Load Balancing** distribui automaticamente o tráfego entre vários alvos, como instâncias EC2, contêineres e IPs, em múltiplas zonas de disponibilidade. Ele monitora a saúde dos alvos e encaminha requisições apenas para os que estão operacionais, ajustando sua capacidade conforme a demanda. A AWS oferece diferentes tipos de balanceadores de carga. Para esse projeto, utilizaremos o **Classic Load Balancer**.
+O serviço de **Elastic Load Balancing** distribui automaticamente o tráfego entre vários alvos, como instâncias do EC2, contêineres e IPs, em múltiplas zonas de disponibilidade. Ele monitora a saúde dos alvos e encaminha requisições apenas para os que estão operacionais, ajustando sua capacidade conforme a demanda. A AWS oferece diferentes tipos de balanceadores de carga. Para esse projeto, utilizaremos um **Application Load Balancer**, que atua na camada 7 do modelo OSI, sendo ideal para aplicações web como o WordPress. O ALB permite distribuir o tráfego de maneira eficiente com protocolos HTTP/HTTPS, oferecendo mais flexibilidade e desempenho para gerenciar as requisições entre as instâncias do EC2.
 
 #### 6.1 Configurações Gerais
 
@@ -354,7 +354,7 @@ O serviço de **Elastic Load Balancing** distribui automaticamente o tráfego en
 
 2. Clique em "**Criar load balancer**".
 
-3. Como **tipo de load balancer**, selecione "**Classic Load Balancer**" e clique em "**Criar**".
+3. Como **tipo de load balancer**, selecione "**Application Load Balancer**" e clique em "**Criar**".
 
 4. Dê um nome descritivo ao load balancer.
 
@@ -366,21 +366,31 @@ O serviço de **Elastic Load Balancing** distribui automaticamente o tráfego en
 
 2. Em "**Mapeamentos**", selecione as duas zonas de disponibilidade (**us-east-1a** e **us-east-1b**) e selecione a **sub-rede pública** disponível em cada uma delas.
 
-3. Em "**Grupos de segurança**", selecione o **grupo de segurança do CLB**.
+3. Em "**Grupos de segurança**", selecione o **grupo de segurança do ALB**.
 
-4. Em "**Listeners e roteamento**", certifique-se de que tanto o protocolo do *listener* quanto o da *instância* é o protocolo **HTTP** (Porta **80**).
+4. Em "**Listeners e roteamento**", certifique-se de que o protocolo do *listener* é o protocolo **HTTP** (Porta **80**).
 
-5. Em ¨**Verificação de integridade**", mantenha o protocolo e a porta do ping padrão e alterer o caminho do ping para `/wp-admin/install.php`.
+5. Em "**Ação padrão**", abaixo da caixa de seleção do grupo de destino, clique em "**Criar grupo de destino**".
 
-6. Em "**Instâncias**", não adicionaremos instâncias manualmente, pois elas serão adicionadas dinamicamente mais tarde pelo Auto Scaling Group.
+6. Criaremos um grupo de destino para as **instâncias do EC2**. Em "**Tipo de destino**", selecione "**Instâncias**".
 
-7. Em "**Atributos**", certifique-se de que a opção "**Habilitar balanceamento de carga entre zonas**" está selecionada e mantenha as demais padrão.
+7. Dê um nome ao grupo de destino e, em seguida, em "**Protocolo:Porta**", selecione **HTTP** para o protocolo e **80** para a porta.
+
+8. Em "**Tipo de endereço de IP**", mantenha **IPv4**. Abaixo, selecione a VPC criada para o projeto e, como **versão do protocolo**, selecione "**HTTP1**".
+
+9. Em "**Verificações de integridade**", selecione "**HTTP**" como protocolo e, em "**caminho de verificação de integridade**", altere para `/wp-admin/install.php`.
+
+6. Em "**Registrar destinos**", não registraremos instâncias manualmente, pois elas serão registradas dinamicamente mais tarde pelo **Auto Scaling Group**.
+
+7. Clique em "**Criar grupo de destino**" e retorne à página de configuração do ALB.
+
+7. Selecione o grupo de destino criado anteriormente e clique em "**Criar load balancer**".
 
 8. Clique em "**Criar load balancer**".
 
 ## 7. Configuração do Auto Scaling Group
 
-O Auto Scaling Group (ASG) é um serviço que gerencia a escalabilidade e a disponibilidade das instâncias EC2. Ele utiliza um modelo de execução baseado em políticas, que ajustam automaticamente o número de instâncias em resposta a métricas de demanda, como a utilização de CPU ou tráfego. Isso assegura que a infraestrutura esteja dimensionada de forma otimizada, tanto para alta carga quanto para períodos de menor demanda.
+O Auto Scaling Group (ASG) é um serviço que gerencia a escalabilidade e a disponibilidade das instâncias do EC2. Ele utiliza um modelo de execução baseado em políticas, que ajustam automaticamente o número de instâncias em resposta a métricas de demanda, como a utilização de CPU ou tráfego. Isso assegura que a infraestrutura esteja dimensionada de forma otimizada, tanto para alta carga quanto para períodos de menor demanda.
 
 #### 7.1 Configurações Gerais
 
@@ -396,15 +406,15 @@ O Auto Scaling Group (ASG) é um serviço que gerencia a escalabilidade e a disp
 
 3. Em "**Tipo de instância**", selecione "**t2.micro**".
 
-4. Em "**Par de chaves**", crie um par de chaves ou selecione um par de chaves já existente para se conectar às instâncias EC2.
+4. Em "**Par de chaves**", crie um par de chaves ou selecione um par de chaves já existente para se conectar às instâncias do EC2.
 
-5. Em "**Configurações de rede**", selecione "**Não incluir no modelo de execução**", e, em seguida, em "**Firewall**", selecione o **grupo de segurança das instâncias EC2**".
+5. Em "**Configurações de rede**", selecione "**Não incluir no modelo de execução**", e, em seguida, em "**Firewall**", selecione o **grupo de segurança das instâncias do EC2**".
 
 6. Mantenha as demais opções padrão e clique em "**Detalhes avançados**".
 
 7. Mantenha as demais opções padrão e vá até a última opção ("**Dados do usuário**").
 
-8. Criaremos um script de inicialização para ambas as instâncias EC2 que:
+8. Criaremos um script de inicialização para ambas as instâncias do EC2 que:
 
     - Monta automaticamente o sistema de arquivos EFS 
     - Conecta automaticamente à instância do banco de dados RDS 
@@ -471,25 +481,32 @@ docker-compose up -d
 
 7. Em "**Balanceamento de carga**", selecione "**Anexar a um balanceador de carga existente**".
 
-8. Em "**Anexar a um balanceador de carga existente**", selecione "**Escolher entre Classic Load Balancers**". Selecione o CLB criado anteriormente.
+8. Em "**Anexar a um balanceador de carga existente**", selecione "**Escolha entre seus grupos de destino de balanceador de carga**". Selecione o grupo de destino criado anteriormente para o **ALB**.
 
 9. Clique em "**Próximo**". Em "**Configurar tamanho do grupo e ajuste de escala**", configure as opções de escalabilidade:
 
     - Capacidade desejada: 2
     - Capacidade mínima desejada: 1
-    - Capacidade máxima desejada: 2 
+    - Capacidade máxima desejada: 4 
 
-10. Mantenha todas as demais opções padrão e clique em "**Pular para revisão**".
+10. Em "**Ajuste de escala automática**", selecione "**Política de dimensionamento com monitoramento do objetivo**"
 
-11. Caso esteja tudo conforme configurado anteriormente, clique em "**Criar grupo de Auto Scaling**".
+11. Dê um nome à política de escalabilidade. Em "**Tipo de métrica**", selecione "**Média de utilização da CPU**".
+
+12. Digite **70** para o **valor de destino** e **200** para o **aquecimento da instância**. 
+
+> [!NOTE]
+> O valor de 70% de utilização de CPU permite escalar a infraestrutura de forma eficiente, sem desperdiçar recursos. Os 200 segundos de aquecimento garantem tempo suficiente para inicializar completamente a instância do WordPress, assegurando que ela esteja totalmente operacional antes de receber tráfego.
+
+13. Mantenha as demais opções padrão e clique em "**Pular para a revisão**". Caso esteja tudo conforme configurado anteriormente, clique em "**Criar grupo de Auto Scaling**".
 
 ## 8. Testando a Implementação da Infraestrutura
 
-1. Na painel **EC2**, na seção "**Load Balancers**", selecione o CLB criado anteriormente.
+1. Na painel **EC2**, na seção "**Load Balancers**", selecione o ALB criado anteriormente.
 
 2. Em "**Detalhes**", verifique o status. O status deve mostrar duas instâncias **em serviço**. 
 
-3. Abaixo, em "**Nome do DNS**", copie o nome do DNS associado ao CLB e, em um navegador, cole o nome na barra de pesquisa.
+3. Abaixo, em "**Nome do DNS**", copie o nome do DNS associado ao ALB e, em um navegador, cole o nome na barra de pesquisa.
 
 4. Você deve ver a página de configuração inicial do WordPress.
 
