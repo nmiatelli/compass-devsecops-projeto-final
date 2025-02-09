@@ -61,12 +61,14 @@ Antes de criarmos as instâncias do EC2 que hospedarão as aplicações do WordP
 
 5. Configure os recursos:
 
-    - CIDR da VPC: 10.0.0.0/16
-    - Número de zonas de disponibilidade (AZs): 2
-    - Número de sub-redes públicas: 2
-    - Número de sub-redes privadas: 4 
-    - Gateway NAT: 1 por AZ
-    - VPC endpoints: Nenhuma 
+| Recurso | Especificação |
+|---------|---------------|
+| CIDR da VPC | 10.0.0.0/16 |
+| Zonas de Disponibilidade (AZs) | 2 |
+| Sub-redes públicas | 2 |
+| Sub-redes privadas | 4 |
+| Gateway NAT | 1 por AZ |
+| VPC endpoints | Nenhuma |
 
 6. Opcionalmente, adicione tags descritivas à VPC. Isso ajuda a identificar facilmente os recursos associados ao projeto.
 
@@ -121,7 +123,8 @@ Após criados os grupos de segurança, daremos sequência à configuração das 
 
     - Tipo: HTTP
     - Porta: 80
-    - Tipo de origem: qualquer local-ipv4 (0.0.0.0/0)
+    - Tipo de origem: personalizado
+    - Origem: qualquer local-ipv4 (0.0.0.0/0)
 
 3. Clique em "**Salvar regras**".
 
