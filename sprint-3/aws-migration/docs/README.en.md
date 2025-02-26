@@ -18,3 +18,46 @@ The new architecture is designed with the following key principles in mind:
 - **Data backups** for protection and recovery.
 - An **object storage system** (for assets like images, videos, etc.) for scalable and durable storage.
 - Enhanced **security** measures to protect both data and infrastructure.
+
+### Table of Contents
+
+1. [Current Architecture](#1-current-architecture)
+    - 1.1 [Architecture Overview](#11-architecture-overview)
+    - 1.2 [Server Infrastructure](#12-server-infrastructure)
+    - 1.3 [Current Architecture Diagram](#13-current-architecture-diagram)
+
+## 1. Current Architecture
+
+### 1.1 Architecture Overview
+The current system uses a three-tier architecture with separate servers for database, frontend, and backend functions. Nginx on the backend server acts as a load balancer for the three APIs and serves static content, while the React frontend and MySQL database operate on dedicated servers.
+
+## 1.2 Server Infrastructure
+
+### Database Server
+
+- **Purpose**: MySQL Database Server
+- **Storage**: 500GB of data
+- **Memory**: 10GB RAM
+- **Processing**: 3 CPU Cores
+
+### Frontend Server
+
+- **Purpose**: React Application
+- **Storage**: 5GB of data
+- **Memory**: 2GB RAM
+- **Processing**: 1 CPU Core
+
+### Backend Server
+
+- **Purpose**: Backend APIs with Nginx Load Balancer
+- **Components**:
+  - 3 APIs
+  - Nginx 
+  - Static file storage
+- **Storage**: 5GB of data
+- **Memory**: 4GB RAM
+- **Processing**: 2 CPU Cores
+
+## 1.3 Current Architecture Diagram
+
+![Current Architecture Diagram](../imgs/arqatualfasteng-en.png)
