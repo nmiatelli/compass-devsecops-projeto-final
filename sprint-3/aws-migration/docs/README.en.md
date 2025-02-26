@@ -60,4 +60,4 @@ The current system uses a three-tier architecture with separate servers for data
 
 ## 1.3 Current Architecture Diagram
 
-![Current Architecture Diagram](../imgs/arqatualfasteng-en.png)
+![Current Architecture Diagram](../imgs/currentarchfasteng.png)
