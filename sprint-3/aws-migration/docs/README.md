@@ -36,14 +36,14 @@ O sistema atual utiliza uma arquitetura de três camadas com servidores separado
 - **Finalidade**: Servidor de Banco de Dados MySQL
 - **Armazenamento**: 500GB de dados
 - **Memória**: 10GB RAM
-- **Processamento**: 3 Núcleos de CPU
+- **Processamento**: 3 Cores
 
 ### Servidor do Frontend
 
 - **Finalidade**: Aplicação React
 - **Armazenamento**: 5GB de dados
 - **Memória**: 2GB RAM
-- **Processamento**: 1 Núcleo de CPU
+- **Processamento**: 1 Core
 
 ### Servidor do Backend
 
@@ -54,7 +54,7 @@ O sistema atual utiliza uma arquitetura de três camadas com servidores separado
   - Armazenamento de arquivos estáticos
 - **Armazenamento**: 5GB de dados
 - **Memória**: 4GB RAM
-- **Processamento**: 2 Núcleos de CPU
+- **Processamento**: 2 Cores
 
 ## 1.3 Diagrama da Arquitetura Atual
 
