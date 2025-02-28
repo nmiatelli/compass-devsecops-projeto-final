@@ -24,7 +24,15 @@ A nova arquitetura será planejada para atender as seguintes diretrizes:
 1. [Arquitetura Atual](#1-arquitetura-atual)
     - 1.1 [Visão Geral da Arquitetura](#11-visão-geral-da-arquitetura)
     - 1.2 [Infraestrutura dos Servidores](#12-infraestrutura-dos-servidores)
-    - 1.2 [Diagrama da Arquitetura Atual](#13-diagrama-da-arquitetura-atual)
+    - 1.3 [Diagrama da Arquitetura Atual](#13-diagrama-da-arquitetura-atual)
+2. [Arquitetura Proposta](#2-arquitetura-proposta)
+  - 2.1 [Etapa 1: As-Is](#21-etapa-1-as-is)
+      - 2.1.1 [Diagrama](#211-diagrama)
+  - 2.2 [Etapa 2: Modernização](#22-etapa-2-modernização)
+      - 2.2.1 [Diagrama](#221-diagrama)
+3. [Custos Totais](#3-custos-totais)
+  - 3.1 [As-Is](#31-as-is)
+  - 3.2 [Após Modernização](#32-após-modernização)
 
 ### 1.1 Visão Geral da Arquitetura
 O sistema atual utiliza uma arquitetura de três camadas com servidores separados para banco de dados, frontend e funções do backend. O Nginx no servidor do backend atua como balanceador de carga para as três APIs e serve conteúdo estático, enquanto o frontend em React e o banco de dados MySQL operam em servidores dedicados.
@@ -59,3 +67,12 @@ O sistema atual utiliza uma arquitetura de três camadas com servidores separado
 ## 1.3 Diagrama da Arquitetura Atual
 
 ![Diagrama da Arquitetura Atual](../imgs/arqatualfasteng.png)
+
+## 2. Arquitetura Proposta
+### 2.1 Etapa 1: As-Is
+#### 2.1.1 Diagrama
+### 2.2 Etapa 2: Modernização
+#### 2.2.1 Diagrama
+## 3. Custos Totais
+### 3.1 As-Is
+### 3.2 Após Modernização
