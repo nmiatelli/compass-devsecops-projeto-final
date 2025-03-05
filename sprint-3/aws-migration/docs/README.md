@@ -28,11 +28,6 @@ A nova arquitetura será planejada para atender as seguintes diretrizes:
 2. [Arquitetura Proposta](#2-arquitetura-proposta)
   - 2.1 [Etapa 1: Lift-and-Shift (As-Is)](#21-etapa-1-lift-and-shift-as-is)
       - 2.1.1 [Diagrama](#211-diagrama)
-  - 2.2 [Etapa 2: Modernização](#22-etapa-2-modernização)
-      - 2.2.1 [Diagrama](#221-diagrama)
-3. [Custos Totais](#3-custos-totais)
-  - 3.1 [As-Is](#31-as-is)
-  - 3.2 [Após Modernização](#32-após-modernização)
 
 ### 1.1 Visão Geral da Arquitetura
 O sistema atual utiliza uma arquitetura de três camadas com servidores separados para banco de dados, frontend e funções do backend. O Nginx no servidor do backend atua como balanceador de carga para as três APIs e serve conteúdo estático, enquanto o frontend em React e o banco de dados MySQL operam em servidores dedicados.
