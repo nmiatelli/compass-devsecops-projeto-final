@@ -25,9 +25,10 @@ A nova arquitetura será planejada para atender as seguintes diretrizes:
     - 1.1 [Visão Geral da Arquitetura](#11-visão-geral-da-arquitetura)
     - 1.2 [Infraestrutura dos Servidores](#12-infraestrutura-dos-servidores)
     - 1.3 [Diagrama da Arquitetura Atual](#13-diagrama-da-arquitetura-atual)
-2. [Arquitetura Proposta](#2-arquitetura-proposta)
-    - 2.1 [Etapa 1: Lift-and-Shift (As-Is)](#21-etapa-1-lift-and-shift-as-is)
-        - 2.1.1 [Diagrama](#211-diagrama)
+2. [Migração Lift-and-Shift (As-Is)](#2-migração-lift-and-shift-as-is)
+    - 2.1 [Migração do Servidor de Banco de Dados com DMS](#21-migração-do-servidor-de-banco-de-dados-com-dms)
+    - 2.2 [Migração dos Servidores de Aplicação com MGN](#22-migração-dos-servidores-de-aplicação-com-mgn)
+    - 2.3 [Diagrama Pós-Migração](#23-diagrama-pós-migração)
 
 ### 1.1 Visão Geral da Arquitetura
 O sistema atual utiliza uma arquitetura de três camadas com servidores separados para banco de dados, frontend e funções do backend. O Nginx no servidor do backend atua como balanceador de carga para as três APIs e serve conteúdo estático, enquanto o frontend em React e o banco de dados MySQL operam em servidores dedicados.
@@ -63,11 +64,13 @@ O sistema atual utiliza uma arquitetura de três camadas com servidores separado
 
 ![Diagrama da Arquitetura Atual](../imgs/arqatualfasteng.png)
 
-## 2. Arquitetura Proposta
+## 2. Migração Lift-and-Shift (As-Is)
 
-### 2.1 Etapa 1: Lift-and-Shift (As-Is)
+### 2.1 Migração do Servidor de Banco de Dados com DMS
 
-Nesta primeira etapa, utilizamos o **Application Migration Service** para migrar os servidores do ambiente on-premises para a AWS de forma eficiente e com o mínimo de downtime, sem alterações significativas na infraestrutura.
+### 2.2 Migração dos Servidores de Aplicação com MGN
+
+Nesta segunda etapa, utilizamos o **Application Migration Service** para migrar os servidores do ambiente on-premises para a AWS de forma eficiente e com o mínimo de downtime, sem alterações significativas na infraestrutura.
 
 #### Servidores de Origem
 
@@ -108,3 +111,7 @@ O cutover é a etapa final, onde a infraestrutura na AWS é oficialmente colocad
   - **Monitoramento pós-cutover:** Após o cutover, um período de monitoramento é essencial para garantir que o ambiente na AWS esteja funcionando como esperado e para detectar problemas logo no início.
 
 Neste ponto, o processo de lift-and-shift é concluído e as instâncias estão operando na nuvem com a infraestrutura de suporte configurada para garantir alta disponibilidade, escalabilidade e segurança.
+
+### 2.3 Diagrama Pós-Migração As-Is
+
+![Diagrama Pós-Migração As-Is](../imgs/awsasismigrationdiagram.png)
