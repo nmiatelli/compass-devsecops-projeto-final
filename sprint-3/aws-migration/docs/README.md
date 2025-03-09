@@ -68,9 +68,42 @@ O sistema atual utiliza uma arquitetura de três camadas com servidores separado
 
 ### 2.1 Migração do Servidor de Banco de Dados com DMS
 
+Nesta primeira etapa, utilizamos o AWS Database Migration Service (DMS) para migrar o banco de dados MySQL do ambiente on-premises para a AWS, com a opção de migração **sem servidor**. A opção sem servidor elimina a necessidade de gerenciar manualmente instâncias de replicação, ajustando automaticamente a capacidade conforme necessário durante a migração do banco. Neste modelo de migração, os custos são gerados apenas pelos recursos efetivamente utilizados durante o processo, o que otimiza os gastos, sem a necessidade de dimensionar ou gerenciar a infraestrutura.
+
+#### Configuração dos Endpoints de Origem e Destino
+
+O primeiro passo é configurar os endpoints no AWS DMS sem servidor:
+
+  - **Configuração do endpoint de origem:** Definimos o banco de dados MySQL on-premises como origem, fornecendo detalhes de conexão necessários.
+  - **Configuração de acesso à rede:** Implementamos uma VPN para estabelecer uma conexão segura entre o ambiente on-premises e a AWS.
+  - **Configuração do endpoint de destino:** Definimos o Amazon RDS for MySQL como destino da migração.
+
+#### Criação da Replicação Sem Servidor
+
+Após configurar os endpoints, seguimos para a criação da replicação sem servidor:
+
+  - **Definição de capacidade:** Configuramos as unidades de capacidade mínimas e máximas (DCUs) que o DMS pode provisionar automaticamente conforme a necessidade.
+  - **Configuração de escalonamento automático:** Aproveitamos a capacidade do DMS sem servidor de gerenciar automaticamente o provisionamento de recursos.
+  - **Definição de parâmetros de replicação:** Ajustamos configurações específicas para garantir uma migração eficiente e confiável.
+
+#### Execução da Replicação
+
+Com a replicação configurada, iniciamos o processo de migração:
+
+  - **Coleta de metadados:** O DMS se conecta ao banco de origem e coleta os metadados necessários.
+  - **Provisionamento automático:** O serviço provisiona a capacidade adequada para a replicação, conforme a configuração estabelecida.
+  - **Monitoramento do escalonamento:** Acompanhamos como o DMS ajusta automaticamente os recursos conforme a carga de trabalho da migração.
+
+#### Testes de Validação
+
+Após a conclusão da migração, realizamos testes:
+
+  - **Verificação de integridade dos dados:** Comparamos os dados entre origem e destino para garantir que foram transferidos corretamente.
+  - **Testes de desempenho:** Executamos consultas para avaliar o tempo de resposta do banco de dados migrado.
+
 ### 2.2 Migração dos Servidores de Aplicação com MGN
 
-Nesta segunda etapa, utilizamos o **Application Migration Service** para migrar os servidores do ambiente on-premises para a AWS de forma eficiente e com o mínimo de downtime, sem alterações significativas na infraestrutura.
+Nesta segunda etapa, utilizamos o **Application Migration Service** para migrar os servidores do ambiente on-premises para a AWS com o mínimo de downtime, sem alterações significativas na infraestrutura.
 
 #### Servidores de Origem
 
@@ -88,10 +121,9 @@ Após a replicação dos dados para o servidor de replicação, os dados são en
 
 Após a preparação e validação dos dados na staging area, os dados são convertidos em instâncias EC2 na AWS. Este processo transforma os volumes EBS que contêm os dados replicados em volumes de armazenamento anexados a instâncias EC2 configuradas de acordo com as necessidades do ambiente. As instâncias EC2 são então configuradas com a infraestrutura necessária, incluindo:
 
-  - **Configuração de rede:** As instâncias são colocadas em subnets privadas com regras de segurança definidas nos Security Groups e Network ACLs.
+  - **Configuração de rede:** As instâncias são colocadas em subnets privadas com regras de segurança definidas nos grupos de segurança e Network ACLs.
   - **Balanceamento de carga:** Um **Application Load Balancer** é configurado para distribuir o tráfego de forma eficiente entre as instâncias EC2, garantindo alta disponibilidade.
   - **Auto Scaling:** As instâncias EC2 são configuradas em um **Auto Scaling Group** para permitir a escalabilidade automática com base na demanda de tráfego.
-  - **DNS:** O **Amazon Route 53** é configurado para gerenciar o DNS, direcionando o tráfego para as instâncias EC2 de forma eficiente.
 
 #### Testes
 
@@ -104,10 +136,12 @@ Nesta etapa, realizamos testes para garantir que tudo está funcionando como esp
 
 #### Cutover
 
-O cutover é a etapa final, onde a infraestrutura na AWS é oficialmente colocada em produção. Após os testes bem-sucedidos, a migração é finalizada, e a produção no ambiente local é desativada em favor do novo ambiente na nuvem. Isso envolve:
+O cutover é a etapa final, onde a infraestrutura na AWS é oficialmente colocada em produção. Após os testes bem-sucedidos, a migração é finalizada, e a produção no ambiente local é desativada em favor do novo ambiente na nuvem. Para garantir consistência e minimizar o downtime, o cutover do banco de dados e das aplicações é realizado de forma coordenada. Isso envolve:
 
-  - **Reconfiguração do DNS e redirecionamento de tráfego:** Alterar as configurações do DNS (através do Route 53) para apontar para a infraestrutura AWS em vez da infraestrutura local.
-  - **Desativação de sistemas locais:** Após a validação final, os servidores on-premises podem ser desativados ou mantidos como redundantes, caso seja necessário um plano de contingência.
+  - **Desativação de sistemas locais:** Após a validação final, os servidores on-premises são desativados para garantir que não haja mais escritas no banco de dados.
+  - **Finalização da Replicação do DMS:** O DMS aplica todas as alterações pendentes no banco de dados AWS, garantindo que ele esteja completamente sincronizado com o banco on-premises.
+  - **Redirecionamento das aplicações:** As aplicações migradas na AWS são configuradas para apontar para o banco de dados na AWS.
+  - **Reconfiguração do DNS e redirecionamento de tráfego:** O DNS é atualizado (através do Route 53) para apontar para a infraestrutura AWS em vez da infraestrutura local.
   - **Monitoramento pós-cutover:** Após o cutover, um período de monitoramento é essencial para garantir que o ambiente na AWS esteja funcionando como esperado e para detectar problemas logo no início.
 
 Neste ponto, o processo de lift-and-shift é concluído e as instâncias estão operando na nuvem com a infraestrutura de suporte configurada para garantir alta disponibilidade, escalabilidade e segurança.
