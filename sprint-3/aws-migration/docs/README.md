@@ -28,7 +28,8 @@ A nova arquitetura será planejada para atender as seguintes diretrizes:
 2. [Migração Lift-and-Shift (As-Is)](#2-migração-lift-and-shift-as-is)
     - 2.1 [Migração do Servidor de Banco de Dados com DMS](#21-migração-do-servidor-de-banco-de-dados-com-dms)
     - 2.2 [Migração dos Servidores de Aplicação com MGN](#22-migração-dos-servidores-de-aplicação-com-mgn)
-    - 2.3 [Diagrama Pós-Migração](#23-diagrama-pós-migração)
+    - 2.3 [Serviços Utilizados](#23-serviços-utilizados)
+    - 2.4 [Diagrama Pós-Migração](#23-diagrama-pós-migração)
 
 ### 1.1 Visão Geral da Arquitetura
 O sistema atual utiliza uma arquitetura de três camadas com servidores separados para banco de dados, frontend e funções do backend. O Nginx no servidor do backend atua como balanceador de carga para as três APIs e serve conteúdo estático, enquanto o frontend em React e o banco de dados MySQL operam em servidores dedicados.
@@ -146,6 +147,50 @@ O cutover é a etapa final, onde a infraestrutura na AWS é oficialmente colocad
 
 Neste ponto, o processo de lift-and-shift é concluído e as instâncias estão operando na nuvem com a infraestrutura de suporte configurada para garantir alta disponibilidade, escalabilidade e segurança.
 
-### 2.3 Diagrama Pós-Migração As-Is
+### 2.3 Serviços Utilizados
+
+Durante a migração e a configuração da infraestrutura na AWS, utilizamos diversos serviços para garantir uma solução eficiente, segura e escalável. Os principais serviços empregados no processo foram:
+
+#### Route 53
+
+  Utilizado para gerenciamento de DNS, permitindo o redirecionamento do tráfego para as novas instâncias e serviços na AWS. Garantindo uma solução escalável de roteamento de tráfego.
+
+#### CloudFront
+
+  Implementado como uma **rede de distribuição de conteúdo (CDN)**, o CloudFront garante a entrega rápida e global de conteúdo estático (como imagens, CSS e JavaScript) armazenado em buckets do S3. Ele utiliza **edge locations** da AWS para cachear o conteúdo mais próximo dos usuários finais, reduzindo a latência e melhorando a experiência de uso. Além disso, o CloudFront é integrado ao **WAF (Web Application Firewall)** para proteger a aplicação contra ataques comuns da web, como **SQL injection**, **cross-site scripting (XSS)** e **DDoS**, garantindo segurança e desempenho otimizados.
+
+#### S3 (Simple Storage Service)
+
+  Utilizado para armazenamento de dados estáticos, como imagens, vídeos e backups. O S3 proporciona durabilidade, escalabilidade e disponibilidade de dados. Aliado ao CloudFront, o S3 atua como origem para o cache de conteúdo estático, permitindo a entrega rápida e global desses arquivos por meio de edge locations da AWS. Essa combinação reduz a latência e diminui a carga sobre os servidores de aplicação.
+
+#### Application Load Balancer (ALB)
+
+  o ALB, com suporte para **roteamento baseado em caminho**, atua como ponto de entrada para tráfego dinâmico, permitindo direcionar requisições para diferentes grupos de instâncias EC2 com base no caminho da URL. Caso uma requisição chegue ao CloudFront e não seja para conteúdo estático (ex.: APIs ou rotas dinâmicas da aplicação), o CloudFront encaminha a requisição ao ALB. O ALB, por sua vez, utiliza **balanceamento de carga entre zonas** para distribuir o tráfego de forma eficiente entre as instâncias EC2 em múltiplas zonas de disponibilidade, garantindo alta disponibilidade e escalabilidade.  
+
+#### EC2 (Elastic Compute Cloud)
+
+  Utilizado para provisionar e gerenciar as instâncias de servidores de aplicação na AWS, proporcionando flexibilidade e escalabilidade conforme a demanda de tráfego.
+
+#### Auto Scaling Groups
+
+  Configurado para garantir que as instâncias EC2 escalem automaticamente de acordo com a demanda de tráfego, permitindo alta disponibilidade e desempenho sob diferentes cargas.
+
+#### RDS (Relational Database Service)
+
+  Utilizado para a migração e gestão do banco de dados MySQL na AWS, oferecendo alta disponibilidade e backups automáticos, além de reduzir a complexidade da administração do banco de dados.
+
+#### CloudWatch
+
+  Implementado para monitoramento em tempo real dos recursos da AWS, como EC2 e RDS, além de coletar métricas e logs de eventos para garantir a saúde da infraestrutura.
+
+#### Amazon SNS (Simple Notification Service)
+
+  Utilizado para enviar notificações e alertas em tempo real sobre eventos críticos, como falhas em recursos ou alterações na infraestrutura, para equipes responsáveis.
+
+#### CloudTrail
+
+  Implementado para registrar logs de atividades na AWS, permitindo a auditoria de todas as ações realizadas na infraestrutura, aumentando a segurança e a rastreabilidade das operações.
+
+### 2.4 Diagrama Pós-Migração As-Is
 
 ![Diagrama Pós-Migração As-Is](../imgs/awsasismigrationdiagram.png)
