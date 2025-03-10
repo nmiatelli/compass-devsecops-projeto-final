@@ -30,7 +30,8 @@ A nova arquitetura será planejada para atender as seguintes diretrizes:
     - 2.2 [Migração dos Servidores de Aplicação com MGN](#22-migração-dos-servidores-de-aplicação-com-mgn)
     - 2.3 [Serviços Utilizados](#23-serviços-utilizados)
     - 2.4 [Diagrama Pós-Migração](#23-diagrama-pós-migração)
-
+    - 2.5 [Custos da Migração](#25-custos-da-migração)
+    
 ### 1.1 Visão Geral da Arquitetura
 O sistema atual utiliza uma arquitetura de três camadas com servidores separados para banco de dados, frontend e funções do backend. O Nginx no servidor do backend atua como balanceador de carga para as três APIs e serve conteúdo estático, enquanto o frontend em React e o banco de dados MySQL operam em servidores dedicados.
 
@@ -200,3 +201,7 @@ Durante a migração, além da base essencial de infraestrutura em nuvem (VPC, S
 ### 2.4 Diagrama Pós-Migração As-Is
 
 ![Diagrama Pós-Migração As-Is](../imgs/awsasismigrationdiagram.png)
+
+### 2.5 Custos da Migração 
+
+
