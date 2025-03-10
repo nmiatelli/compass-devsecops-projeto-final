@@ -149,7 +149,7 @@ Neste ponto, o processo de lift-and-shift é concluído e as instâncias estão 
 
 ### 2.3 Serviços Utilizados
 
-Durante a migração e a configuração da infraestrutura na AWS, utilizamos diversos serviços para garantir uma solução eficiente, segura e escalável. Os principais serviços empregados no processo foram:
+Durante a migração, além da base essencial de infraestrutura em nuvem (VPC, Security Groups, e demais recursos) e os serviços de migração de aplicações (MGN) e de banco de dados (DMS), utilizamos diversos outros serviços para garantir uma solução eficiente, segura e escalável. Os principais serviços empregados no processo foram:
 
 #### Route 53
 
@@ -166,6 +166,12 @@ Durante a migração e a configuração da infraestrutura na AWS, utilizamos div
 #### Application Load Balancer (ALB)
 
   o ALB, com suporte para **roteamento baseado em caminho**, atua como ponto de entrada para tráfego dinâmico, permitindo direcionar requisições para diferentes grupos de instâncias EC2 com base no caminho da URL. Caso uma requisição chegue ao CloudFront e não seja para conteúdo estático (ex.: APIs ou rotas dinâmicas da aplicação), o CloudFront encaminha a requisição ao ALB. O ALB, por sua vez, utiliza **balanceamento de carga entre zonas** para distribuir o tráfego de forma eficiente entre as instâncias EC2 em múltiplas zonas de disponibilidade, garantindo alta disponibilidade e escalabilidade.  
+
+#### NAT Gateway
+  Utilizado para permitir que instâncias em subnets privadas acessem a internet (para atualizações de pacotes, envio de logs, etc).
+
+#### Network ACLs (NACLs) 
+  Utilizado para controlar o tráfego de entrada e saída no nível de subnets.
 
 #### EC2 (Elastic Compute Cloud)
 
