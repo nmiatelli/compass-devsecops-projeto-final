@@ -65,7 +65,9 @@ O sistema atual utiliza uma arquitetura de três camadas com servidores separado
 
 ## 1.3 Diagrama da Arquitetura Atual
 
-![Diagrama da Arquitetura Atual](../imgs/currentarchfasteng.png)
+<p align="center">
+  <img src="../imgs/currentarchfasteng.png" alt="Diagrama da Arquitetura Atual"/>
+</p>
 
 ## 2. Migração Lift-and-Shift (As-Is)
 
