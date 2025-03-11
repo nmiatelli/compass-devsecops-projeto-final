@@ -5,7 +5,7 @@
 
 ## Sobre o Projeto
 
-A **Fast Engineering S/A** está em um processo de modernização de sua infraestrutura de eCommerce, visando uma migração para a AWS. A solução atual não atende mais à alta demanda de acessos e compras, e por isso, a empresa está adotando uma abordagem de migração em duas fases:
+A **Fast Engineering S/A** está em um processo de modernização de sua infraestrutura de eCommerce, visando uma migração para a AWS. A solução atual não atende mais a alta demanda de acessos e compras, e por isso, a empresa está adotando uma abordagem de migração em duas fases:
 
 1. **Migração "Lift-and-Shift" (as-is)**: Esta fase inicial tem como objetivo a rápida migração dos sistemas para a AWS, sem mudanças significativas na arquitetura, garantindo que a infraestrutura atenda a demanda crescente de forma imediata. Para isso, utilizamos o **AWS MGN (Application Migration Service)** para a migração dos servidores, enquanto o **AWS DMS (Database Migration Service)** será responsável pela migração do banco de dados de forma eficiente e com o mínimo de downtime.
   
@@ -29,11 +29,11 @@ A nova arquitetura será planejada para atender as seguintes diretrizes:
     - 2.1 [Migração do Servidor de Banco de Dados com DMS](#21-migração-do-servidor-de-banco-de-dados-com-dms)
     - 2.2 [Migração dos Servidores de Aplicação com MGN](#22-migração-dos-servidores-de-aplicação-com-mgn)
     - 2.3 [Serviços Utilizados](#23-serviços-utilizados)
-    - 2.4 [Diagrama Pós-Migração](#23-diagrama-pós-migração)
-    - 2.5 [Custos da Migração](#25-custos-da-migração)
-    - 2.6 [Custos da Infraestrutura Pós-Migração](#26-custos-da-infraestrutura-pós-migração)
+    - 2.4 [Custos da Migração](#24-custos-da-migração)
+    - 2.5 [Custos da Infraestrutura Pós-Migração](#25-custos-da-infraestrutura-pós-migração)
+    - 2.6 [Diagrama da Arquitetura Pós-Migração](#26-diagrama-da-arquitetura-pós-migração)
     
-### 1.1 Visão Geral da Arquitetura
+## 1.1 Visão Geral da Arquitetura
 O sistema atual utiliza uma arquitetura de três camadas com servidores separados para banco de dados, frontend e funções do backend. O Nginx no servidor do backend atua como balanceador de carga para as três APIs e serve conteúdo estático, enquanto o frontend em React e o banco de dados MySQL operam em servidores dedicados.
 
 ## 1.2 Infraestrutura dos Servidores
@@ -205,13 +205,10 @@ Durante a migração, além da base essencial de infraestrutura em nuvem (VPC, S
 
   Implementado para registrar logs de atividades na AWS, permitindo a auditoria de todas as ações realizadas na infraestrutura, aumentando a segurança e a rastreabilidade das operações.
 
-### 2.4 Diagrama Pós-Migração As-Is
+### 2.4 Custos da Migração 
+
+### 2.5 Custos da Infraestrutura Pós-Migração
+
+### 2.6 Diagrama da Arquitetura Pós-Migração As-Is
 
 ![Diagrama Pós-Migração As-Is](../imgs/awsasismigrationdiagram.png)
-
-### 2.5 Custos da Migração 
-
-
-
-### 2.6 Custos da Infraestrutura Pós-Migração
-
