@@ -183,7 +183,7 @@ Durante a migração, além da base essencial de infraestrutura em nuvem (VPC, S
 
 #### EC2 (Elastic Compute Cloud)
 
-  Utilizado para provisionar e gerenciar as instâncias de servidores de aplicação na AWS, proporcionando flexibilidade e escalabilidade conforme a demanda de tráfego.
+  Utilizado para provisionar e gerenciar as instâncias de servidores de aplicação na AWS, que são implantadas em subnets privadas para maior segurança. O acesso a essas instâncias é realizado por meio do **AWS Systems Manager Session Manager (SSM)**, eliminando a necessidade de exposição pública e garantindo um gerenciamento seguro e centralizado.
 
 #### Auto Scaling Groups
 
