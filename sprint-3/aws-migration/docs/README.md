@@ -164,6 +164,10 @@ Durante a migração, além da base essencial de infraestrutura em nuvem (VPC, S
 
   Utilizado para armazenamento de dados estáticos, como imagens, vídeos e backups. O S3 proporciona durabilidade, escalabilidade e disponibilidade de dados. Aliado ao CloudFront, o S3 atua como origem para o cache de conteúdo estático, permitindo a entrega rápida e global desses arquivos por meio de edge locations da AWS. Essa combinação reduz a latência e diminui a carga sobre os servidores de aplicação.
 
+#### S3 Gateway Endpoint
+
+  O S3 Gateway Endpoint possibilita uma comunicação privada entre a VPC e o S3, sem a necessidade de passar pela internet pública, garantindo conexões mais seguras entre as instâncias em sub-redes privadas e os buckets S3. Além disso, como a comunicação ocorre diretamente pela rede da AWS, a latência é significativamente reduzida.
+
 #### Application Load Balancer (ALB)
 
   o ALB, com suporte para **roteamento baseado em caminho**, atua como ponto de entrada para tráfego dinâmico, permitindo direcionar requisições para diferentes grupos de instâncias EC2 com base no caminho da URL. Caso uma requisição chegue ao CloudFront e não seja para conteúdo estático (ex.: APIs ou rotas dinâmicas da aplicação), o CloudFront encaminha a requisição ao ALB. O ALB, por sua vez, utiliza **balanceamento de carga entre zonas** para distribuir o tráfego de forma eficiente entre as instâncias EC2 em múltiplas zonas de disponibilidade, garantindo alta disponibilidade e escalabilidade.  
