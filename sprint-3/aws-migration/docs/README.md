@@ -169,7 +169,7 @@ Durante a migração, além da base essencial de infraestrutura em nuvem (VPC, S
 
 #### S3 Gateway Endpoint
 
-  O S3 Gateway Endpoint possibilita uma comunicação privada entre a VPC e o S3, sem a necessidade de passar pela internet pública, garantindo conexões mais seguras entre as instâncias em sub-redes privadas e os buckets S3. Além disso, como a comunicação ocorre diretamente pela rede da AWS, a latência é significativamente reduzida.
+  O S3 Gateway Endpoint possibilita uma comunicação privada entre a VPC e o S3, sem a necessidade de passar pela internet pública, garantindo conexões mais seguras entre as instâncias em subnets privadas e os buckets S3. Além disso, como a comunicação ocorre diretamente pela rede da AWS, a latência é significativamente reduzida.
 
 #### Application Load Balancer (ALB)
 
@@ -210,6 +210,8 @@ Durante a migração, além da base essencial de infraestrutura em nuvem (VPC, S
 ![Diagrama Pós-Migração As-Is](../imgs/awsasismigrationdiagram.png)
 
 ### 2.5 Custos da Migração 
+
+
 
 ### 2.6 Custos da Infraestrutura Pós-Migração
 
