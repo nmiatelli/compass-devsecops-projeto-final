@@ -205,7 +205,11 @@ Durante a migração, além da base essencial de infraestrutura em nuvem (VPC, S
 
   Implementado para registrar logs de atividades na AWS, permitindo a auditoria de todas as ações realizadas na infraestrutura, aumentando a segurança e a rastreabilidade das operações.
 
-### 2.4 Custos da Migração 
+### 2.4 Custos da Migração
+
+![Lift and Shift Cost Estimate](../imgs/liftandshiftcostestimate.png)
+
+Para ver um relatório detalhado contento todos os compontentes individuais da migração, acesse o [PDF da estimativa de custos](../resources/Lift%20and%20Shift%20Migration%20Cost%20Estimate%20-%20Calculadora%20de%20Preços%20da%20AWS.pdf).
 
 ### 2.5 Custos da Infraestrutura Pós-Migração
 
