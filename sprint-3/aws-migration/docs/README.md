@@ -213,6 +213,9 @@ Para ver um relatório detalhado contento todos os compontentes individuais da m
 
 ### 2.5 Custos da Infraestrutura Pós-Migração
 
+![Post Migration Cost Estimate](../imgs/postmigrationcostestimate.png)
+Para ver um relatório detalhado contento todos os compontentes individuais da infraestrutura, acesse o [PDF da estimativa de custos](../resources/Post%20Migration%20Cost%20Estimate%20-%20Calculadora%20de%20Preços%20da%20AWS.pdf).
+
 ### 2.6 Diagrama da Arquitetura Pós-Migração As-Is
 
 ![Diagrama Pós-Migração As-Is](../imgs/awsasismigrationdiagram.png)
