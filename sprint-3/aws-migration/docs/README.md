@@ -29,8 +29,8 @@ A nova arquitetura será planejada para atender as seguintes diretrizes:
     - 2.1 [Migração do Servidor de Banco de Dados com DMS](#21-migração-do-servidor-de-banco-de-dados-com-dms)
     - 2.2 [Migração dos Servidores de Aplicação com MGN](#22-migração-dos-servidores-de-aplicação-com-mgn)
     - 2.3 [Serviços Utilizados](#23-serviços-utilizados)
-    - 2.4 [Custos da Migração](#24-custos-da-migração)
-    - 2.5 [Custos da Infraestrutura Pós-Migração](#25-custos-da-infraestrutura-pós-migração)
+    - 2.4 [Custo da Migração](#24-custo-da-migração)
+    - 2.5 [Custo da Infraestrutura Pós-Migração](#25-custo-da-infraestrutura-pós-migração)
     - 2.6 [Diagrama da Arquitetura Pós-Migração](#26-diagrama-da-arquitetura-pós-migração)
     
 ## 1.1 Visão Geral da Arquitetura
@@ -205,16 +205,16 @@ Durante a migração, além da base essencial de infraestrutura em nuvem (VPC, S
 
   Implementado para registrar logs de atividades na AWS, permitindo a auditoria de todas as ações realizadas na infraestrutura, aumentando a segurança e a rastreabilidade das operações.
 
-### 2.4 Custos da Migração
+### 2.4 Custo da Migração
 
 ![Lift and Shift Cost Estimate](../imgs/liftandshiftcostestimate.png)
 
-Para ver um relatório detalhado contento todos os compontentes individuais da migração, acesse o [PDF da estimativa de custos](../resources/Lift%20and%20Shift%20Migration%20Cost%20Estimate%20-%20Calculadora%20de%20Preços%20da%20AWS.pdf).
+Para ver um relatório detalhado contendo todos os componentes individuais da migração, acesse o [PDF da estimativa de custos](../resources/Lift%20and%20Shift%20Migration%20Cost%20Estimate%20-%20Calculadora%20de%20Preços%20da%20AWS.pdf).
 
-### 2.5 Custos da Infraestrutura Pós-Migração
+### 2.5 Custo da Infraestrutura Pós-Migração
 
 ![Post Migration Cost Estimate](../imgs/postmigrationcostestimate.png)
-Para ver um relatório detalhado contento todos os compontentes individuais da infraestrutura, acesse o [PDF da estimativa de custos](../resources/Post%20Migration%20Cost%20Estimate%20-%20Calculadora%20de%20Preços%20da%20AWS.pdf).
+Para ver um relatório detalhado contendo todos os componentes individuais da infraestrutura, acesse o [PDF da estimativa de custos](../resources/Post%20Migration%20Cost%20Estimate%20-%20Calculadora%20de%20Preços%20da%20AWS.pdf).
 
 ### 2.6 Diagrama da Arquitetura Pós-Migração As-Is
 
