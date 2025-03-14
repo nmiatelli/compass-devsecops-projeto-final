@@ -234,7 +234,7 @@ Após a conclusão da migração lift-and-shift, iniciamos a modernização da i
 
 ### 3.1 Configuração da Infraestrutura
 
-Nesta primeira etapa da modernização, nós adaptamos a VPC existente para suportar o **cluster EKS**. Ajustamos a arquitetura das subnets e configuramos grupos de segurança específicos para o EKS e políticas IAM adequadas para permitir que o EKS gerencie recursos. Nós revisamos a configuração de NACL para garantir que o tráfego de rede necessário para o Kubernetes possa fluir corretamente.
+Nesta primeira etapa da modernização, nós adaptamos a VPC existente para suportar o **cluster EKS**. Ajustamos a arquitetura das subnets e configuramos grupos de segurança específicos para o EKS e políticas IAM adequadas para permitir que o EKS gerencie recursos. Além disto, atualizamos a arquitetura do banco de dados, adicionando uma **réplica de leitura**, com o objetivo de otimizar a escalabilidade para operações de leitura e melhorar o desempenho geral do sistema. Por fim, nós revisamos a configuração de NACL para garantir que o tráfego de rede necessário para o Kubernetes possa fluir corretamente.
 
 ### 3.2 Implantação do Cluster EKS
 
