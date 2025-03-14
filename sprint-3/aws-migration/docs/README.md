@@ -41,7 +41,7 @@ A nova arquitetura será planejada para atender as seguintes diretrizes:
     - 3.6 [Configuração do Ingress e AWS Load Balancer Controller](#36-configuração-do-ingress-e-aws-load-balancer-controller)
     - 3.7 [Configuração da Pipeline CI/CD](#37-configuração-da-pipeline-cicd)
     - 3.8 [Integração com Serviços Existentes](#38-integração-com-serviços-existentes)
-    - 3.9 [Diagrama da Arquitetura Pós-Modernização](#4-diagrama-da-arquitetura-pós-modernização)
+    - 3.9 [Diagrama da Arquitetura Pós-Modernização](#39-diagrama-da-arquitetura-pós-modernização)
 
 ## 1.1 Visão Geral da Arquitetura
 O sistema atual utiliza uma arquitetura de três camadas com servidores separados para banco de dados, frontend e funções do backend. O Nginx no servidor do backend atua como balanceador de carga para as três APIs e serve conteúdo estático, enquanto o frontend em React e o banco de dados MySQL operam em servidores dedicados.
