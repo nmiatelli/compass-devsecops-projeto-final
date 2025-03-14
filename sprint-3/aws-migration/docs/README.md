@@ -32,7 +32,14 @@ A nova arquitetura será planejada para atender as seguintes diretrizes:
     - 2.4 [Custo da Migração](#24-custo-da-migração)
     - 2.5 [Custo da Infraestrutura Pós-Migração](#25-custo-da-infraestrutura-pós-migração)
     - 2.6 [Diagrama da Arquitetura Pós-Migração](#26-diagrama-da-arquitetura-pós-migração)
-    
+3. [Modernização da Arquitetura para Kubernetes](#3-modernização-da-arquitetura-para-kubernetes)
+    - 3.1 [Configuração da Infraestrutura](#31-configuração-da-infraestrutura)
+    - 3.2 [Implantação do Cluster EKS](#32-implantação-do-cluster-eks)
+    - 3.3 [Configuração dos Worker Nodes](#33-configuração-dos-worker-nodes)
+    - 3.4 [Containerização das Aplicações](#34-containerização-das-aplicações)
+    - 3.5 [Configuração do Ingress e AWS Load Balancer Controller](#35-configuração-do-ingress-e-aws-load-balancer-controller)
+4. [Diagrama da Arquitetura Pós-Modernização](#4-diagrama-da-arquitetura-pós-modernização)
+
 ## 1.1 Visão Geral da Arquitetura
 O sistema atual utiliza uma arquitetura de três camadas com servidores separados para banco de dados, frontend e funções do backend. O Nginx no servidor do backend atua como balanceador de carga para as três APIs e serve conteúdo estático, enquanto o frontend em React e o banco de dados MySQL operam em servidores dedicados.
 
@@ -216,6 +223,34 @@ Para ver um relatório detalhado contendo todos os componentes individuais da mi
 ![Post Migration Cost Estimate](../imgs/postmigrationcostestimate.png)
 Para ver um relatório detalhado contendo todos os componentes individuais da infraestrutura, acesse o [PDF da estimativa de custos](../resources/Post%20Migration%20Cost%20Estimate%20-%20Calculadora%20de%20Preços%20da%20AWS.pdf).
 
-### 2.6 Diagrama da Arquitetura Pós-Migração As-Is
+### 2.6 Diagrama da Arquitetura Pós-Migração
 
 ![Diagrama Pós-Migração As-Is](../imgs/awsasismigrationdiagram.png)
+
+## 3. Modernização da Arquitetura para Kubernetes
+
+Após a conclusão da migração lift-and-shift, iniciamos a modernização da infraestrutura utilizando o **Amazon Elastic Kubernetes Service (EKS)**, o serviço da AWS que gerencia e hospeda o Kubernetes. O EKS simplifica o gerenciamento, oferecendo escalabilidade, alta disponibilidade, segurança integrada e automação de atualizações, além de integração com outros serviços AWS. Nesta fase, o objetivo é containerizar os serviços de backend e frontend, transformando a arquitetura monolítica do backend em microserviços, orquestrados pelo EKS, o que melhora a escalabilidade e a resiliência do sistema.
+
+### 3.1 Configuração da Infraestrutura
+
+Nesta primeira etapa da modernização, nós adaptamos a VPC existente para suportar o **cluster EKS**. Ajustamos a arquitetura das subnets e configuramos grupos de segurança específicos para o EKS e políticas IAM adequadas para permitir que o EKS gerencie recursos. Nós revisamos a configuração de NACL para garantir que o tráfego de rede necessário para o Kubernetes possa fluir corretamente.
+
+### 3.2 Implantação do Cluster EKS
+
+Nesta segunda etapa, nós configuramos o cluster EKS com o **plano de controle** Kubernetes gerenciado pela AWS. Neste passo, definimos a versão do Kubernetes, as opções de rede, e outros parâmetros do cluster, e configuramos o endpoint do cluster para acesso privado. O EKS gerenciará os componentes principais do Kubernetes, como o **API server**, **etcd** e o **controller manager**.
+
+### 3.3 Configuração dos Worker Nodes
+
+Nesta etapa, são configurados os **worker nodes**, que são as máquinas que executarão nossos aplicativos. Isto é feito através da criação de grupos de nós gerenciados pelo EKS (managed node groups). Distribuímos os nós em múltiplas zonas de disponibilidade para alta disponibilidade. Neste passo, configuramos o tipo de instância, tamanho do disco, quantidade mínima e máxima de nós, e políticas de escalabilidade automática.
+
+### 3.4 Containerização das Aplicações
+
+Nesta etapa, nós conteinerizamos as aplicações do frontend e do backend, criando **imagens Docker** que armazenamos no **Amazon Elastic Container Registry (ECR)**. Para o frontend, definimos Deployments no Kubernetes para gerenciar os pods, configurando replicação, estratégias de atualização e recursos necessários. Criamos Services para expor o frontend dentro do cluster, permitindo a comunicação entre componentes. Já no backend, quebramos o monólito, que consistia em três APIs, em microserviços independentes, cada um com sua própria imagem Docker e configurações específicas. Para esses microserviços, também configuramos Deployments e Services no Kubernetes, garantindo a escalabilidade, comunicação e gerenciamento eficazes dos diferentes componentes do sistema.
+
+### 3.5 Configuração do Ingress e AWS Load Balancer Controller
+
+Nesta etapa, instalamos o AWS Load Balancer Controller no cluster para gerenciar os balanceadores de carga da AWS. Configuramos recursos Ingress no Kubernetes para rotear o tráfego externo para os serviços internos. Isso substitui o Application Load Balancer tradicional da nossa arquitetura anterior, permitindo uma integração mais profunda com o Kubernetes para roteamento de tráfego baseado em regras de host e path.
+
+## 4. Diagrama da Arquitetura Pós-Modernização
+
+![Diagrama Pós-Modernização](../imgs/awsk8smodernizationdiagram.png)
