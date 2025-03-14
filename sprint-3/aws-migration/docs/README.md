@@ -36,8 +36,9 @@ A nova arquitetura será planejada para atender as seguintes diretrizes:
     - 3.1 [Configuração da Infraestrutura](#31-configuração-da-infraestrutura)
     - 3.2 [Implantação do Cluster EKS](#32-implantação-do-cluster-eks)
     - 3.3 [Configuração dos Worker Nodes](#33-configuração-dos-worker-nodes)
-    - 3.4 [Containerização das Aplicações](#34-containerização-das-aplicações)
-    - 3.5 [Configuração do Ingress e AWS Load Balancer Controller](#35-configuração-do-ingress-e-aws-load-balancer-controller)
+    - 3.4 [Configuração do Armazenamento para os pods]
+    - 3.5 [Containerização das Aplicações](#34-containerização-das-aplicações)
+    - 3.6 [Configuração do Ingress e AWS Load Balancer Controller](#35-configuração-do-ingress-e-aws-load-balancer-controller)
 4. [Diagrama da Arquitetura Pós-Modernização](#4-diagrama-da-arquitetura-pós-modernização)
 
 ## 1.1 Visão Geral da Arquitetura
@@ -243,13 +244,21 @@ Nesta segunda etapa, nós configuramos o cluster EKS com o **plano de controle**
 
 Nesta etapa, são configurados os **worker nodes**, que são as máquinas que executarão nossos aplicativos. Isto é feito através da criação de grupos de nós gerenciados pelo EKS (managed node groups). Distribuímos os nós em múltiplas zonas de disponibilidade para alta disponibilidade. Neste passo, configuramos o tipo de instância, tamanho do disco, quantidade mínima e máxima de nós, e políticas de escalabilidade automática.
 
-### 3.4 Containerização das Aplicações
+### 3.4 Configuração do Armazenamento para os Pods 
+
+Nesta etapa, configuramos o armazenamento persistente utilizando o Amazon **EFS (Elastic File System)**. Para isso, criamos um sistema de arquivos EFS com pontos de acesso em múltiplas zonas de disponibilidade e instalamos o driver **EFS CSI (Container Storage Interface)** no cluster EKS, que permite que o Kubernetes gerencie dinâmicamente o provisionamento de volumes EFS. Além disto, implementamos **PersistentVolumeClaims** para nossos workloads que precisam de armazenamento persistente. Como o EFS é um sistema de arquivos compartilhado e compatível com NFS, configuraramos volumes no modo **ReadWriteMany**, permitindo que múltiplos pods acessem simultaneamente o mesmo volume.
+
+### 3.5 Containerização das Aplicações
 
 Nesta etapa, nós conteinerizamos as aplicações do frontend e do backend, criando **imagens Docker** que armazenamos no **Amazon Elastic Container Registry (ECR)**. Para o frontend, definimos Deployments no Kubernetes para gerenciar os pods, configurando replicação, estratégias de atualização e recursos necessários. Criamos Services para expor o frontend dentro do cluster, permitindo a comunicação entre componentes. Já no backend, quebramos o monólito, que consistia em três APIs, em microserviços independentes, cada um com sua própria imagem Docker e configurações específicas. Para esses microserviços, também configuramos Deployments e Services no Kubernetes, garantindo a escalabilidade, comunicação e gerenciamento eficazes dos diferentes componentes do sistema.
 
-### 3.5 Configuração do Ingress e AWS Load Balancer Controller
+### 3.6 Configuração do Ingress e AWS Load Balancer Controller
 
-Nesta etapa, instalamos o AWS Load Balancer Controller no cluster para gerenciar os balanceadores de carga da AWS. Configuramos recursos Ingress no Kubernetes para rotear o tráfego externo para os serviços internos. Isso substitui o Application Load Balancer tradicional da nossa arquitetura anterior, permitindo uma integração mais profunda com o Kubernetes para roteamento de tráfego baseado em regras de host e path.
+Nesta etapa, instalamos o AWS **Load Balancer Controller** no cluster para gerenciar os balanceadores de carga da AWS. Configuramos recursos Ingress no Kubernetes para rotear o tráfego externo para os serviços internos. Isso substitui o Application Load Balancer tradicional da nossa arquitetura anterior, permitindo uma integração mais profunda com o Kubernetes para roteamento de tráfego baseado em regras de host e path.
+
+### 3.7 Integração com Serviços Existentes
+
+Nesta última etapa, integramos serviços AWS como CloudFront, WAF, Route 53, e S3 com nosso EKS. CloudFront continua a servir como nossa CDN, WAF protege contra ameaças, Route 53 gerencia o DNS apontando para o Ingress, e S3 é usado para armazenar ativos estáticos.
 
 ## 4. Diagrama da Arquitetura Pós-Modernização
 
