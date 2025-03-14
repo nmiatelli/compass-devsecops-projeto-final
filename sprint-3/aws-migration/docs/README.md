@@ -36,9 +36,11 @@ A nova arquitetura será planejada para atender as seguintes diretrizes:
     - 3.1 [Configuração da Infraestrutura](#31-configuração-da-infraestrutura)
     - 3.2 [Implantação do Cluster EKS](#32-implantação-do-cluster-eks)
     - 3.3 [Configuração dos Worker Nodes](#33-configuração-dos-worker-nodes)
-    - 3.4 [Configuração do Armazenamento para os pods]
-    - 3.5 [Containerização das Aplicações](#34-containerização-das-aplicações)
-    - 3.6 [Configuração do Ingress e AWS Load Balancer Controller](#35-configuração-do-ingress-e-aws-load-balancer-controller)
+    - 3.4 [Configuração do Armazenamento para os Pods](#34-configuração-do-armazenamento-para-os-pods)
+    - 3.5 [Containerização das Aplicações](#35-containerização-das-aplicações)
+    - 3.6 [Configuração do Ingress e AWS Load Balancer Controller](#36-configuração-do-ingress-e-aws-load-balancer-controller)
+    - 3.7 [Configuração da Pipeline CI/CD](#37-configuração-da-pipeline-cicd)
+    - 3.8 [Integração com Serviços Existentes](#38-integração-com-serviços-existentes)
 4. [Diagrama da Arquitetura Pós-Modernização](#4-diagrama-da-arquitetura-pós-modernização)
 
 ## 1.1 Visão Geral da Arquitetura
@@ -256,9 +258,21 @@ Nesta etapa, nós conteinerizamos as aplicações do frontend e do backend, cria
 
 Nesta etapa, instalamos o AWS **Load Balancer Controller** no cluster para gerenciar os balanceadores de carga da AWS. Configuramos recursos Ingress no Kubernetes para rotear o tráfego externo para os serviços internos. Isso substitui o Application Load Balancer tradicional da nossa arquitetura anterior, permitindo uma integração mais profunda com o Kubernetes para roteamento de tráfego baseado em regras de host e path.
 
-### 3.7 Integração com Serviços Existentes
+### 3.7 Configuração da Pipeline CI/CD
 
-Nesta última etapa, integramos serviços AWS como CloudFront, WAF, Route 53, e S3 com nosso EKS. CloudFront continua a servir como nossa CDN, WAF protege contra ameaças, Route 53 gerencia o DNS apontando para o Ingress, e S3 é usado para armazenar ativos estáticos.
+Nesta etapa, nós implementamos uma pipeline CI/CD utilizando o **GitHub Actions** para nossa nova arquitetura EKS. O fluxo que configuramos segue a seguinte abordagem: quando um desenvolvedor envia código para o repositório GitHub, a pipeline é automaticamente acionada. O GitHub Actions analisa as alterações e determina seu tipo, se são mudanças de infraestrutura ou mudanças na aplicação.
+
+Para mudanças de infraestrutura, a pipeline executa primeiro o comando `terraform plan` que analisa as alterações propostas e gera um plano de execução. Após revisão e aprovação, o comando `terraform apply` é executado para criar ou atualizar os recursos na AWS, incluindo o cluster EKS, políticas IAM, e outros componentes de infraestrutura.
+
+Em paralelo ou após a atualização da infraestrutura, a pipeline processa as mudanças da aplicação. O GitHub Actions realiza o build das imagens Docker das nossas aplicações e as publica no Amazon **ECR**.
+
+Na etapa final, a pipeline implanta a aplicação atualizada no cluster EKS. O GitHub Actions usa o `kubectl` diretamente para aplicar as definições do Kubernetes, fazendo com que o cluster puxe as novas imagens do ECR e reinicie os pods afetados.
+
+Além disto, integramos nossa pipeline com o AWS **Key Management Service (KMS)** e o AWS **Secrets Manager**. Durante a execução, a pipeline obtém as credenciais e variáveis de ambiente necessárias diretamente desses serviços, garantindo que informações sensíveis nunca sejam expostas no código ou nos logs da pipeline. Isso nos proporciona um nível adicional de segurança, além de centralizar o gerenciamento de segredos em um único local, facilitando a auditoria e a rotação de credenciais.
+
+### 3.8 Integração com Serviços Existentes
+
+Nesta última etapa, integramos os outros serviços AWS como CloudFront, WAF, Route 53, e S3 com nosso EKS. CloudFront continua a servir como nossa CDN, WAF protege contra ameaças, Route 53 gerencia o DNS apontando para o Ingress, e S3 é usado para armazenar ativos estáticos.
 
 ## 4. Diagrama da Arquitetura Pós-Modernização
 
