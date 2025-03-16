@@ -5,9 +5,9 @@
 
 ## Sobre o Projeto
 
-A **Fast Engineering S/A** está em um processo de modernização de sua infraestrutura de eCommerce, visando uma migração para a AWS. A solução atual não atende mais a alta demanda de acessos e compras, e por isso, a empresa está adotando uma abordagem de migração em duas fases:
+A **Fast Engineering S/A** está em um processo de modernização de sua infraestrutura de eCommerce, visando uma migração para a AWS. A solução atual não atende mais a alta demanda de acessos e compras, e por isto, a empresa está adotando uma abordagem de migração em duas fases:
 
-1. **Migração "Lift-and-Shift" (as-is)**: Esta fase inicial tem como objetivo a rápida migração dos sistemas para a AWS, sem mudanças significativas na arquitetura, garantindo que a infraestrutura atenda a demanda crescente de forma imediata. Para isso, utilizamos o **AWS MGN (Application Migration Service)** para a migração dos servidores, enquanto o **AWS DMS (Database Migration Service)** será responsável pela migração do banco de dados de forma eficiente e com o mínimo de downtime.
+1. **Migração "Lift-and-Shift" (as-is)**: Esta fase inicial tem como objetivo a rápida migração dos sistemas para a AWS, sem mudanças significativas na arquitetura, garantindo que a infraestrutura atenda a demanda crescente de forma imediata. Para isto, utilizamos o **AWS MGN (Application Migration Service)** para a migração dos servidores, enquanto o **AWS DMS (Database Migration Service)** será responsável pela migração do banco de dados de forma eficiente e com o mínimo de downtime.
   
 2. **Modernização para o Kubernetes**: Após a migração, a infraestrutura será modernizada para um ambiente baseado em Kubernetes, utilizando o **Amazon EKS (Elastic Kubernetes Service)**. O **EKS** oferece uma solução totalmente gerenciada para execução de clusters Kubernetes, permitindo maior escalabilidade, disponibilidade e facilidade de gerenciamento. 
 
@@ -35,13 +35,15 @@ A nova arquitetura será planejada para atender as seguintes diretrizes:
 3. [Modernização da Arquitetura para Kubernetes](#3-modernização-da-arquitetura-para-kubernetes)
     - 3.1 [Configuração da Infraestrutura](#31-configuração-da-infraestrutura)
     - 3.2 [Implantação do Cluster EKS](#32-implantação-do-cluster-eks)
-    - 3.3 [Configuração dos Worker Nodes](#33-configuração-dos-worker-nodes)
-    - 3.4 [Configuração do Armazenamento para os Pods](#34-configuração-do-armazenamento-para-os-pods)
-    - 3.5 [Containerização das Aplicações](#35-containerização-das-aplicações)
-    - 3.6 [Configuração do Ingress e AWS Load Balancer Controller](#36-configuração-do-ingress-e-aws-load-balancer-controller)
-    - 3.7 [Configuração da Pipeline CI/CD](#37-configuração-da-pipeline-cicd)
-    - 3.8 [Integração com Serviços Existentes](#38-integração-com-serviços-existentes)
-    - 3.9 [Diagrama da Arquitetura Pós-Modernização](#39-diagrama-da-arquitetura-pós-modernização)
+      - 3.2.1 [Configuração dos Worker Nodes](#321-configuração-dos-worker-nodes)
+      - 3.2.2 [Configuração do Armazenamento para os Pods](#322-configuração-do-armazenamento-para-os-pods)
+      - 3.2.3 [Configuração do Ingress e AWS Load Balancer Controller](#323-configuração-do-ingress-e-aws-load-balancer-controller)
+    - 3.3 [Containerização das Aplicações](#33-containerização-das-aplicações)
+    - 3.4 [Configuração da Pipeline CI/CD](#34-configuração-da-pipeline-cicd)
+    - 3.5 [Integração com Serviços Existentes](#35-integração-com-serviços-existentes)
+    - 3.6 [Custo da Infraestrutura Pós-Modernização](#36-custo-da-infraestrutura-pós-modernização)
+    - 3.7 [Diagrama da Arquitetura Pós-Modernização](#37-diagrama-da-arquitetura-pós-modernização)
+4. [Conclusão](#4-conclusão)
 
 ## 1.1 Visão Geral da Arquitetura
 O sistema atual utiliza uma arquitetura de três camadas com servidores separados para banco de dados, frontend e funções do backend. O Nginx no servidor do backend atua como balanceador de carga para as três APIs e serve conteúdo estático, enquanto o frontend em React e o banco de dados MySQL operam em servidores dedicados.
@@ -122,7 +124,7 @@ Nesta segunda etapa, utilizamos o **Application Migration Service** para migrar 
 
 #### Servidores de Origem
 
-Como primeiro passo, é essencial a instalação de um **agente de replicação** nos servidores on-premises. Para isso, criamos um usuário do IAM na AWS com as permissões necessárias para interagir com os recursos da AWS e permitir a replicação dos dados a partir dos servidores de origem para a nuvem.
+Como primeiro passo, é essencial a instalação de um **agente de replicação** nos servidores on-premises. Para isto, criamos um usuário do IAM na AWS com as permissões necessárias para interagir com os recursos da AWS e permitir a replicação dos dados a partir dos servidores de origem para a nuvem.
 
 #### Servidores de Replicação
 
@@ -130,7 +132,7 @@ Neste passo, servidores de replicação são provisionados automaticamente pelo 
 
 #### Staging Area 
 
-Após a replicação dos dados para o servidor de replicação, os dados são enviados para a staging area na AWS, no nosso caso consistindo em um volume EBS. Nesta área, os dados são armazenados temporariamente e preparados para a conversão final. Durante este processo, são realizadas verificações, como a validação da integridade dos dados replicados, a verificação de consistência entre os dados on-premises e os dados na staging area, e ajustes de configuração necessários, como a adaptação de caminhos de diretórios, parâmetros de rede, permissões ou outras configurações específicas de software. Além disso, testes de desempenho são realizados para garantir que a infraestrutura da AWS seja capaz de lidar com o volume de dados. Uma vez validados e ajustados, os dados estão prontos para serem transformados em instâncias EC2 na AWS.
+Após a replicação dos dados para o servidor de replicação, os dados são enviados para a staging area na AWS, no nosso caso consistindo em um volume EBS. Nesta área, os dados são armazenados temporariamente e preparados para a conversão final. Durante este processo, são realizadas verificações, como a validação da integridade dos dados replicados, a verificação de consistência entre os dados on-premises e os dados na staging area, e ajustes de configuração necessários, como a adaptação de caminhos de diretórios, parâmetros de rede, permissões ou outras configurações específicas de software. Além disto, testes de desempenho são realizados para garantir que a infraestrutura da AWS seja capaz de lidar com o volume de dados. Uma vez validados e ajustados, os dados estão prontos para serem transformados em instâncias EC2 na AWS.
 
 #### Conversão e Lançamento das Instâncias EC2
 
@@ -142,7 +144,7 @@ Após a preparação e validação dos dados na staging area, os dados são conv
 
 #### Testes
 
-Nesta etapa, realizamos testes para garantir que tudo está funcionando como esperado. As instâncias migradas são avaliadas em um ambiente de pré-produção na AWS, sem afetar o ambiente de produção original. Isso permite verificar a funcionalidade e a acessibilidade dos dados, além de identificar e corrigir possíveis problemas. Aqui, são realizados os seguintes testes:
+Nesta etapa, realizamos testes para garantir que tudo está funcionando como esperado. As instâncias migradas são avaliadas em um ambiente de pré-produção na AWS, sem afetar o ambiente de produção original. Isto permite verificar a funcionalidade e a acessibilidade dos dados, além de identificar e corrigir possíveis problemas. Aqui, são realizados os seguintes testes:
 
   - **Verificação de dados:** Verificar se os dados foram replicados corretamente e estão acessíveis de forma adequada.
   **Validação de desempenho:** Avaliar o desempenho das instâncias na AWS e compará-lo com o ambiente on-premises para garantir que os requisitos de capacidade estão sendo atendidos.
@@ -151,7 +153,7 @@ Nesta etapa, realizamos testes para garantir que tudo está funcionando como esp
 
 #### Cutover
 
-O cutover é a etapa final, onde a infraestrutura na AWS é oficialmente colocada em produção. Após os testes bem-sucedidos, a migração é finalizada, e a produção no ambiente local é desativada em favor do novo ambiente na nuvem. Para garantir consistência e minimizar o downtime, o cutover do banco de dados e das aplicações é realizado de forma coordenada. Isso envolve:
+O cutover é a etapa final, onde a infraestrutura na AWS é oficialmente colocada em produção. Após os testes bem-sucedidos, a migração é finalizada, e a produção no ambiente local é desativada em favor do novo ambiente na nuvem. Para garantir consistência e minimizar o downtime, o cutover do banco de dados e das aplicações é realizado de forma coordenada. Isto envolve:
 
   - **Desativação de sistemas locais:** Após a validação final, os servidores on-premises são desativados para garantir que não haja mais escritas no banco de dados.
   - **Finalização da Replicação do DMS:** O DMS aplica todas as alterações pendentes no banco de dados AWS, garantindo que ele esteja completamente sincronizado com o banco on-premises.
@@ -171,15 +173,15 @@ Durante a migração, além da base essencial de infraestrutura em nuvem (VPC, S
 
 #### CloudFront
 
-  Implementado como uma **rede de distribuição de conteúdo (CDN)**, o CloudFront garante a entrega rápida e global de conteúdo estático (como imagens, CSS e JavaScript) armazenado em buckets do S3. Ele utiliza **edge locations** da AWS para cachear o conteúdo mais próximo dos usuários finais, reduzindo a latência e melhorando a experiência de uso. Além disso, o CloudFront é integrado ao **WAF (Web Application Firewall)** para proteger a aplicação contra ataques comuns da web, como **SQL injection**, **cross-site scripting (XSS)** e **DDoS**, garantindo segurança e desempenho otimizados.
+  Implementado como uma **rede de distribuição de conteúdo (CDN)**, o CloudFront garante a entrega rápida e global de conteúdo estático (como imagens, CSS e JavaScript) armazenado em buckets do S3. Ele utiliza **edge locations** da AWS para cachear o conteúdo mais próximo dos usuários finais, reduzindo a latência e melhorando a experiência de uso. Além disto, o CloudFront é integrado ao **WAF (Web Application Firewall)** para proteger a aplicação contra ataques comuns da web, como **SQL injection**, **cross-site scripting (XSS)** e **DDoS**, garantindo segurança e desempenho otimizados.
 
 #### S3 (Simple Storage Service)
 
-  Utilizado para armazenamento de dados estáticos, como imagens, vídeos e backups. O S3 proporciona durabilidade, escalabilidade e disponibilidade de dados. Aliado ao CloudFront, o S3 atua como origem para o cache de conteúdo estático, permitindo a entrega rápida e global desses arquivos por meio de edge locations da AWS. Essa combinação reduz a latência e diminui a carga sobre os servidores de aplicação.
+  Utilizado para armazenamento de dados estáticos, como imagens, vídeos e backups. O S3 proporciona durabilidade, escalabilidade e disponibilidade de dados. Aliado ao CloudFront, o S3 atua como origem para o cache de conteúdo estático, permitindo a entrega rápida e global destes arquivos por meio de edge locations da AWS. Esta combinação reduz a latência e diminui a carga sobre os servidores de aplicação.
 
 #### S3 Gateway Endpoint
 
-  O S3 Gateway Endpoint possibilita uma comunicação privada entre a VPC e o S3, sem a necessidade de passar pela internet pública, garantindo conexões mais seguras entre as instâncias em subnets privadas e os buckets S3. Além disso, como a comunicação ocorre diretamente pela rede da AWS, a latência é significativamente reduzida.
+  O S3 Gateway Endpoint possibilita uma comunicação privada entre a VPC e o S3, sem a necessidade de passar pela internet pública, garantindo conexões mais seguras entre as instâncias em subnets privadas e os buckets S3. Além disto, como a comunicação ocorre diretamente pela rede da AWS, a latência é significativamente reduzida.
 
 #### Application Load Balancer (ALB)
 
@@ -193,7 +195,7 @@ Durante a migração, além da base essencial de infraestrutura em nuvem (VPC, S
 
 #### EC2 (Elastic Compute Cloud)
 
-  Utilizado para provisionar e gerenciar as instâncias de servidores de aplicação na AWS, que são implantadas em subnets privadas para maior segurança. O acesso a essas instâncias é realizado por meio do **AWS Systems Manager Session Manager (SSM)**, eliminando a necessidade de exposição pública e garantindo um gerenciamento seguro e centralizado.
+  Utilizado para provisionar e gerenciar as instâncias de servidores de aplicação na AWS, que são implantadas em subnets privadas para maior segurança. O acesso a estass instâncias é realizado por meio do **AWS Systems Manager Session Manager (SSM)**, eliminando a necessidade de exposição pública e garantindo um gerenciamento seguro e centralizado.
 
 #### Auto Scaling Groups
 
@@ -236,29 +238,29 @@ Após a conclusão da migração lift-and-shift, iniciamos a modernização da i
 
 ### 3.1 Configuração da Infraestrutura
 
-Nesta primeira etapa da modernização, nós adaptamos a VPC existente para suportar o **cluster EKS**. Ajustamos a arquitetura das subnets e configuramos grupos de segurança específicos para o EKS e políticas IAM adequadas para permitir que o EKS gerencie recursos. Além disto, atualizamos a arquitetura do banco de dados, adicionando uma **réplica de leitura**, com o objetivo de otimizar a escalabilidade para operações de leitura e melhorar o desempenho geral do sistema. Por fim, nós revisamos a configuração de NACL para garantir que o tráfego de rede necessário para o Kubernetes possa fluir corretamente.
+Nesta primeira etapa da modernização, nós adaptamos a VPC existente para suportar o **cluster EKS**. Ajustamos a arquitetura das subnets e configuramos grupos de segurança específicos para o EKS e políticas IAM adequadas para permitir que o EKS gerencie recursos. Além disto, atualizamos a arquitetura do banco de dados, adicionando uma **réplica de leitura**, com o objetivo de otimizar a escalabilidade para operações de leitura e melhorar o desempenho geral do sistema. Também implementamos o **AWS Managed Prometheus** e o **AWS Managed Grafana** para monitoramento e visualização das métricas do cluster EKS. Por fim, nós revisamos a configuração de NACL para garantir que o tráfego de rede necessário para o Kubernetes possa fluir corretamente.
 
 ### 3.2 Implantação do Cluster EKS
 
 Nesta segunda etapa, nós configuramos o cluster EKS com o **plano de controle** Kubernetes gerenciado pela AWS. Neste passo, definimos a versão do Kubernetes, as opções de rede, e outros parâmetros do cluster, e configuramos o endpoint do cluster para acesso privado. O EKS gerenciará os componentes principais do Kubernetes, como o **API server**, **etcd** e o **controller manager**.
 
-### 3.3 Configuração dos Worker Nodes
+#### 3.2.1 Configuração dos Worker Nodes
 
 Nesta etapa, são configurados os **worker nodes**, que são as máquinas que executarão nossos aplicativos. Isto é feito através da criação de grupos de nós gerenciados pelo EKS (managed node groups). Distribuímos os nós em múltiplas zonas de disponibilidade para alta disponibilidade. Neste passo, configuramos o tipo de instância, tamanho do disco, quantidade mínima e máxima de nós, e políticas de escalabilidade automática.
 
-### 3.4 Configuração do Armazenamento para os Pods 
+#### 3.2.2 Configuração do Armazenamento para os Pods 
 
-Nesta etapa, configuramos o armazenamento persistente utilizando o Amazon **EFS (Elastic File System)**. Para isso, criamos um sistema de arquivos EFS com pontos de acesso em múltiplas zonas de disponibilidade e instalamos o driver **EFS CSI (Container Storage Interface)** no cluster EKS, que permite que o Kubernetes gerencie dinâmicamente o provisionamento de volumes EFS. Além disto, implementamos **PersistentVolumeClaims** para nossos workloads que precisam de armazenamento persistente. Como o EFS é um sistema de arquivos compartilhado e compatível com NFS, configuraramos volumes no modo **ReadWriteMany**, permitindo que múltiplos pods acessem simultaneamente o mesmo volume.
+Nesta etapa, configuramos o armazenamento persistente utilizando o Amazon **EFS (Elastic File System)**. Para isto, criamos um sistema de arquivos EFS com pontos de acesso em múltiplas zonas de disponibilidade e instalamos o driver **EFS CSI (Container Storage Interface)** no cluster EKS, que permite que o Kubernetes gerencie dinâmicamente o provisionamento de volumes EFS. Além disto, implementamos **PersistentVolumeClaims** para nossos workloads que precisam de armazenamento persistente. Como o EFS é um sistema de arquivos compartilhado e compatível com NFS, configuraramos volumes no modo **ReadWriteMany**, permitindo que múltiplos pods acessem simultaneamente o mesmo volume.
 
-### 3.5 Containerização das Aplicações
+#### 3.2.3 Configuração do Ingress e AWS Load Balancer Controller
 
-Nesta etapa, nós conteinerizamos as aplicações do frontend e do backend, criando **imagens Docker** que armazenamos no **Amazon Elastic Container Registry (ECR)**. Para o frontend, definimos Deployments no Kubernetes para gerenciar os pods, configurando replicação, estratégias de atualização e recursos necessários. Criamos Services para expor o frontend dentro do cluster, permitindo a comunicação entre componentes. Já no backend, quebramos o monólito, que consistia em três APIs, em microserviços independentes, cada um com sua própria imagem Docker e configurações específicas. Para esses microserviços, também configuramos Deployments e Services no Kubernetes, garantindo a escalabilidade, comunicação e gerenciamento eficazes dos diferentes componentes do sistema.
+Nesta etapa, instalamos o AWS **Load Balancer Controller** no cluster para gerenciar os balanceadores de carga da AWS. Configuramos recursos Ingress no Kubernetes para rotear o tráfego externo para os serviços internos. Isto substitui o Application Load Balancer tradicional da nossa arquitetura anterior, permitindo uma integração mais profunda com o Kubernetes para roteamento de tráfego baseado em regras de host e path.
 
-### 3.6 Configuração do Ingress e AWS Load Balancer Controller
+### 3.3 Containerização das Aplicações
 
-Nesta etapa, instalamos o AWS **Load Balancer Controller** no cluster para gerenciar os balanceadores de carga da AWS. Configuramos recursos Ingress no Kubernetes para rotear o tráfego externo para os serviços internos. Isso substitui o Application Load Balancer tradicional da nossa arquitetura anterior, permitindo uma integração mais profunda com o Kubernetes para roteamento de tráfego baseado em regras de host e path.
+Nesta etapa, nós conteinerizamos as aplicações do frontend e do backend, criando **imagens Docker** que armazenamos no **Amazon Elastic Container Registry (ECR)**. Para o frontend, definimos Deployments no Kubernetes para gerenciar os pods, configurando replicação, estratégias de atualização e recursos necessários. Criamos Services para expor o frontend dentro do cluster, permitindo a comunicação entre componentes. Já no backend, quebramos o monólito, que consistia em três APIs, em microserviços independentes, cada um com sua própria imagem Docker e configurações específicas. Para estess microserviços, também configuramos Deployments e Services no Kubernetes, garantindo a escalabilidade, comunicação e gerenciamento eficazes dos diferentes componentes do sistema.
 
-### 3.7 Configuração da Pipeline CI/CD
+### 3.4 Configuração da Pipeline CI/CD
 
 Nesta etapa, nós implementamos uma pipeline CI/CD utilizando o **GitHub Actions** para nossa nova arquitetura EKS. O fluxo que configuramos segue a seguinte abordagem: quando um desenvolvedor envia código para o repositório GitHub, a pipeline é automaticamente acionada. O GitHub Actions analisa as alterações e determina seu tipo, se são mudanças de infraestrutura ou mudanças na aplicação.
 
@@ -268,12 +270,21 @@ Em paralelo ou após a atualização da infraestrutura, a pipeline processa as m
 
 Na etapa final, a pipeline implanta a aplicação atualizada no cluster EKS. O GitHub Actions usa o `kubectl` diretamente para aplicar as definições do Kubernetes, fazendo com que o cluster puxe as novas imagens do ECR e reinicie os pods afetados.
 
-Além disto, integramos nossa pipeline com o AWS **Key Management Service (KMS)** e o AWS **Secrets Manager**. Durante a execução, a pipeline obtém as credenciais e variáveis de ambiente necessárias diretamente desses serviços, garantindo que informações sensíveis nunca sejam expostas no código ou nos logs da pipeline. Isso nos proporciona um nível adicional de segurança, além de centralizar o gerenciamento de segredos em um único local, facilitando a auditoria e a rotação de credenciais.
+Além disto, integramos nossa pipeline com o AWS **Key Management Service (KMS)** e o AWS **Secrets Manager**. Durante a execução, a pipeline obtém as credenciais e variáveis de ambiente necessárias diretamente destes serviços, garantindo que informações sensíveis nunca sejam expostas no código ou nos logs da pipeline. Isto nos proporciona um nível adicional de segurança, além de centralizar o gerenciamento de segredos em um único local, facilitando a auditoria e a rotação de credenciais.
 
-### 3.8 Integração com Serviços Existentes
+### 3.5 Integração com Serviços Existentes
 
-Nesta última etapa, integramos os outros serviços AWS como CloudFront, WAF, Route 53, e S3 com nosso EKS. CloudFront continua a servir como nossa CDN, WAF protege contra ameaças, Route 53 gerencia o DNS apontando para o Ingress, e S3 é usado para armazenar ativos estáticos.
+Nesta última etapa, integramos os outros serviços AWS como CloudFront, WAF, Route 53, e S3 com nosso EKS. CloudFront continua a servir como nossa CDN, WAF protege contra ameaças, Route 53 gerencia o DNS apontando para o ALB, que por sua vez encaminha o tráfego para o Ingress, e o S3 é usado para armazenar ativos estáticos.
 
-### 3.9 Diagrama da Arquitetura Pós-Modernização
+### 3.6 Custo da Infraestrutura Pós-Modernização
+
+![Post Modernization Cost Estimate](../imgs/postmodernizationcostestimate.png)
+Para ver um relatório detalhado contendo todos os componentes individuais da infraestrutura, acesse o [PDF da estimativa de custos](../resources/Post%20Modernization%20Cost%20Estimate%20-%20Calculadora%20de%20Preços%20da%20AWS.pdf).
+
+### 3.7 Diagrama da Arquitetura Pós-Modernização
 
 ![Diagrama Pós-Modernização](../imgs/awsk8smodernizationdiagram.png)
+
+## 4. Conclusão
+
+A nova infraestrutura posiciona a Fast Engineering S/A estrategicamente para ocrescimento futuro, com uma plataforma de eCommerce robusta e adaptável à rápidas mudanças. A jornada de migração e modernização para a AWS criou uma arquitetura que não apenas otimiza recursos e custos, mas também garante uma operação resiliente em momentos de alta demanda. Com a base em Kubernetes do Amazon EKS e a integração aos serviços gerenciados da AWS, a empresa agora oferece uma experiência de compra consistente e ininterrupta, mesmo durante picos de tráfego sazonais, fortalecendo a confiança dos clientes e sua vantagem competitiva no mercado de eCommerce.
