@@ -279,7 +279,6 @@ Nesta última etapa, integramos os outros serviços AWS como CloudFront, WAF, Ro
 ### 3.6 Custo da Infraestrutura Pós-Modernização
 
 ![Post Modernization Cost Estimate](../imgs/postmodernizationcostestimate.png)
-
 Para ver um relatório detalhado contendo todos os componentes individuais da infraestrutura, acesse o [PDF da estimativa de custos](../resources/Post%20Modernization%20Cost%20Estimate%20-%20Calculadora%20de%20Preços%20da%20AWS.pdf).
 
 ### 3.7 Diagrama da Arquitetura Pós-Modernização
