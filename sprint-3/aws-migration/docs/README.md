@@ -44,6 +44,7 @@ A nova arquitetura será planejada para atender as seguintes diretrizes:
     - 3.6 [Custo da Infraestrutura Pós-Modernização](#36-custo-da-infraestrutura-pós-modernização)
     - 3.7 [Diagrama da Arquitetura Pós-Modernização](#37-diagrama-da-arquitetura-pós-modernização)
 4. [Conclusão](#4-conclusão)
+5. [Refêrencias](#5-referências)
 
 ## 1.1 Visão Geral da Arquitetura
 O sistema atual utiliza uma arquitetura de três camadas com servidores separados para banco de dados, frontend e funções do backend. O Nginx no servidor do backend atua como balanceador de carga para as três APIs e serve conteúdo estático, enquanto o frontend em React e o banco de dados MySQL operam em servidores dedicados.
@@ -288,3 +289,19 @@ Para ver um relatório detalhado contendo todos os componentes individuais da in
 ## 4. Conclusão
 
 A nova infraestrutura posiciona a Fast Engineering S/A estrategicamente para ocrescimento futuro, com uma plataforma de eCommerce robusta e adaptável à rápidas mudanças. A jornada de migração e modernização para a AWS criou uma arquitetura que não apenas otimiza recursos e custos, mas também garante uma operação resiliente em momentos de alta demanda. Com a base em Kubernetes do Amazon EKS e a integração aos serviços gerenciados da AWS, a empresa agora oferece uma experiência de compra consistente e ininterrupta, mesmo durante picos de tráfego sazonais, fortalecendo a confiança dos clientes e sua vantagem competitiva no mercado de eCommerce.
+
+## 5. Referências
+
+---
+
+- [Documentação do AWS Application Migration Service (MGN)](https://docs.aws.amazon.com/mgn/latest/ug/what-is-application-migration-service.html)
+
+- [Documentação do AWS Database Migration Service (DMS)](https://docs.aws.amazon.com/pt_br/dms/latest/userguide/Welcome.html)
+
+- [Amazon CloudFront - Rede de Entrega de Conteúdo (CDN)](https://docs.aws.amazon.com/pt_br/AmazonCloudFront/latest/DeveloperGuide/Introduction.html)
+
+- [Guia do Usuário do Amazon Elastic Kubernetes Service (EKS)](https://docs.aws.amazon.com/pt_br/eks/latest/userguide/what-is-eks.html)
+
+- [Guia de melhores práticas do Amazon EKS](https://docs.aws.amazon.com/pt_br/eks/latest/best-practices/introduction.html)
+
+- [Kubernetes Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)
