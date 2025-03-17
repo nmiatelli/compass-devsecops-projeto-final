@@ -305,3 +305,5 @@ A nova infraestrutura posiciona a Fast Engineering S/A estrategicamente para ocr
 - [Guia de melhores práticas do Amazon EKS](https://docs.aws.amazon.com/pt_br/eks/latest/best-practices/introduction.html)
 
 - [Kubernetes Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)
+
+- [Volumes Persistentes no Kubernetes](https://kubernetes.io/pt-br/docs/concepts/storage/persistent-volumes/)
